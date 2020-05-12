@@ -38,7 +38,7 @@ use_math: true
 use_mathjax: false
 
 # Add your Google Analytics ID here if you have one and want to use it
-google_analytics: UA-157798723-1
+google_analytics: UA-152392799-4
 
 # Everything below here can be ignored, unless you want to change the theme entirely
 theme: minima
