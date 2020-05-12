@@ -1,0 +1,68 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+
+title: "Kotlin 4 Java Developers"
+description: "KI, artificial intelligence, machine learning"
+github_username: "we-make-ai"
+domain: "we-make.ai"
+# Email and twitter are optional:
+email: "info@we-make.ai"
+linkedin_username: "we-make-ai"
+twitter_username:
+lan: "de"
+timezone: Europe/Vienna
+og:
+    locale: de_AT
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "pages"
+    values:
+      lang: de
+  -
+    scope:
+      path: ""
+      type: "posts"
+
+# Set this to true to get LaTeX math equation support
+use_math: true
+
+# Set this to true to get MathJax math equation support
+use_mathjax: false
+
+# Add your Google Analytics ID here if you have one and want to use it
+google_analytics: UA-157798723-1
+
+# Everything below here can be ignored, unless you want to change the theme entirely
+theme: minima
+minima:
+  date_format: "%Y-%m-%d"
+  skin: wemakeai
+plugins:
+  - jekyll-feed
+  - jekyll-gist
+  - jekyll-octicons
+  - jekyll-github-metadata
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+titles_from_headings:
+  enabled:     true
+  strip_title: true
+  collections: true
+
+highlighter: rouge
+markdown: kramdown
+kramdown:
+  math_engine: katex
+  input: GFM
+  auto_ids: true
+  hard_wrap: false
+  syntax_highlighter: rouge
