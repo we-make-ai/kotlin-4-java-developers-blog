@@ -1,3 +1,12 @@
+---
+title: Lambda Expressions in Kotlin
+description: Wir zeigen, wie wir Lambda-Ausdrücke (lambda expressions) in Kotlin definieren und in unseren Programmen einsetzen können.
+tags: lambda expressions, lambda Ausdrücke, lambda, functional programming, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Lambda Funktionen in Kotlin
 Als _Lambdas_ (bzw. _lambda Funktionen_) bezeichnen wir annonyme Funktionen, die als Ausdruck verwendet werden können.
 

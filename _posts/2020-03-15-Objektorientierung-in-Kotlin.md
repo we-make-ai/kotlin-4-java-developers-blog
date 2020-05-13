@@ -1,3 +1,12 @@
+---
+title: Objektorientierung in Kotlin
+description: Wie wird Objektorientierung in Kotlin umgesetzt?
+tags: Objektorientierung, objektorientierte Programmierung, OOP, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Objektorientierung in Kotlin
 Im Allgemeinen werden in Kotlin diesbezüglich keine vollständig neuen Konzepte eingeführt. Dennoch bringt Kotlin einigen Erweiterungen, die das Arbeiten angenehmer machen.
 

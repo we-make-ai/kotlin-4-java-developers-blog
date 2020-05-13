@@ -1,3 +1,12 @@
+---
+title: Nullable Types in Kotlin
+description: Standardmäßig dürfen in Kotlin Objekte nicht mit null-Werte belegt werden. Manchmal ist dies jedoch erforderlich, wir zeigen, wie wir nullable-types in Kotlin einsetzen.
+tags: nullable, nullable Types, null, null-types, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Nullable Typen in Kotlin
 Vielen Programmieren unterlaufen immer wieder `Null-Pointer` Exceptions - also Ausnahmen, die auftreten, weil eine Variable referenziert wird, die auf keinen konkreten Speicherbereich zeigt. Solche Fehler vorab zu vermeiden ist oftmals schwierig, da sie erst zur Laufzeit auffallen. Daher kann auch der Compiler keine `null`-Pointer Exceptions im Vorfeld abfangen.
 

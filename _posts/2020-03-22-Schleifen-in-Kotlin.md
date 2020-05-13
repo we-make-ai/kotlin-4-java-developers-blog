@@ -1,3 +1,12 @@
+---
+title: Schleifen (Wiederholungsstrukturen) in Kotlin
+description: Auch Kotlin bietet natürlich Schleifen als Konstrukt der Ablaufsteuerung in unseren Programmen. Wir zeigen, welche Typen von Schleifen Kotlin zur Verfügung stellt und wie wir diese einsetzen können.
+tags: Schleife, for-schleife, while-schleife, loops, Flussteuerung, Ablaufsteuerung, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Schleifen in Kotlin
 
 Grunsätzlich gibt es in Kotlin die gleichen Schleifentypen wie in Java.

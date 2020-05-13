@@ -1,3 +1,12 @@
+---
+title: Kontrollstrukturen in Kotlin
+description: Wir zeigen, welche Möglichkeiten an Kontrollstrukturen Kotlin den Programmierer bietet. Wie können wir if-else und when optimal für unsere Programme nutzen?
+tags: kontrollstrukturen, if-else, when, switch, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Kontrollstrukturen in Kotlin
 Dieses Kapitel widmet sich den Basiskontrollstrukturen in Kotlin:
 

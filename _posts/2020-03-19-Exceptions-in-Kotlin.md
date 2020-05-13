@@ -1,3 +1,12 @@
+---
+title: Exception Handling (Ausnahmebehandlung) in Kotlin
+description: Welche Möglichkeiten bietet Kotlin, um Ausnahmen (Exceptions) in den Programmen abzufangen und zu behandeln. Wir zeigen das Exception Handling in Kotlin.
+tags: Ausnahmen, Ausnahmebehandlung, Exceptions, Exception Handling, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Exception Handling in Kotlin
 In Kotlin erfolgt das Exception ähnlich wie in Java. Kotlin unterscheidet jedoch nicht zwischen _checked_ und _unchecked_ Exceptions. In Kotlin können Ausnahmen behandelt werden oder auch nicht. Die Funktion muss dazu in der Signatur - im Unterschied zu Java - keine Angabe machen.
 

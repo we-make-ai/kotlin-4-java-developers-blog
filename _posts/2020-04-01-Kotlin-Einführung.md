@@ -1,3 +1,12 @@
+---
+title: Einführung zu Kotlin
+description: 
+tags: Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Einführung
 
 Warum ein neue Programmiersprache? Was macht Kotlin aus? Worin liegt der Sinn in der Kompatibilität zu Java?

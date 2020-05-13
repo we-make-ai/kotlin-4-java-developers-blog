@@ -1,3 +1,12 @@
+---
+title: Historie von Kotlin
+description: Wir betrachten kurz einen historischen Abriß der Entwicklung der Programmiersprache Kotlin
+tags: Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 ## Historischer Abriss und Kernfunktionalitäten von Kotlin
 
 Kotlin ist - genauso wie Java - eine statisch typisierte Sprache. Doch kann auf die explizite Angabe von Typen vielfach verzichtet werden, was Kotlin sehr dynamisch wirken lässt.

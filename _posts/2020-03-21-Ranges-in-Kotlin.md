@@ -1,3 +1,12 @@
+---
+title: Ranges (Wertebereiche) in Kotlin
+description: Mithilfe von ranges erhalten wir in Kotlin auf einfache Weise Wertebereiche. Wir zeigen, wie wir ranges in Verbindung mit dem IN-Operator verwenden.
+tags: ranges, wertebereiche, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Ranges in Kotlin
 ## Das Schlüsselwort ```in``` in Kotlin
 Ein wesentliches Schlüsselwort in Kotlin in Verbindung mit Ranges ist ```in```. Dieses hat keine direkte Entsprechung in Java.

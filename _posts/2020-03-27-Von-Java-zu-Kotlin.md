@@ -1,3 +1,12 @@
+---
+title: Von Java zu Kotlin
+description: Kotlin wurde ganz bewußt voll kompatibel zu Java gestaltet. Was bedeutet das für den Praxiseinsatz? Wie erfolgt die Konvertierung von Java-Code nach Kotlin und umgekehrt?
+tags: Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Von Java zu Kotlin
 
 Kotlin ist zu Java voll kompatibel. D.h. man kann (theoretisch) auch in einem einzigen Projekt Java und Kotlin-Source-Code mischen.

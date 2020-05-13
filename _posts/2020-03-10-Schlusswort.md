@@ -1,3 +1,12 @@
+---
+title: Zusammenfassung Kotlin 4 Java Developers
+description: Wir fassen die Unterschiede und Gemeinsamkeiten von Kotlin und Java nochmals zusammen.
+tags: Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Schlusswort
 
 Wir haben versucht, die wesentlichen Unterschiede und Gemeinsamkeiten zwischen Java und Kotlin zusammenfassen und so dem versierten Java-Entwickler einen guten Einstieg bzw. Umstieg in die Welt von Kotlin zu ermöglichen.

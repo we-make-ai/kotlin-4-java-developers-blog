@@ -1,3 +1,12 @@
+---
+title: Variablen in Kotlin
+description: Wie können wir in Kotlin Variablen definieren? Wie können wir auf diese Variablen zugreifen?
+tags: variable, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Variablen in Kotlin
 
 In Kotlin können wir Variablen mit den Schlüsselwörtern ```val``` (_read only Variable - Konstante_) und ```var``` (_"echte" Variable_) deklarieren.

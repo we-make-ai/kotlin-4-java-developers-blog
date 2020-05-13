@@ -1,3 +1,12 @@
+---
+title: Konstante in Kotlin
+description: Wie deklariert man Konstante in Kotlin?
+tags: Konstante, Variablen, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Konstante in Kotlin
 Für Konstante basierend auf primitiven Datentypen verwenden wir in Kotlin das Schlüsselwort `const`. Sollte man auf die Erstellung der getter-Methoden durch den Kompiler verzichten wollen, so können wir dieses Verhalten durch die Annotation `@JvMField` erreichen. Dadurch wird nur das Property generiert.
 

@@ -1,3 +1,12 @@
+---
+title: HelloWorld-Programm in Kotlin
+description: Unser erstes einfaches Hello-World, das wir in Kotlin entwickelt haben.
+tags: Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Das klassische HelloWorld in Kotlin
 
 Als erstes Projekt in Kotlin erstellen wir das klassische _HelloWorld_ Programm:

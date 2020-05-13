@@ -1,3 +1,12 @@
+---
+title: Object Declaration vs. Object Expression in Kotlin
+description: In Kotlin stellt `object` ein Singleton dar. Ein Singleton ist per Definition eine Klasse, die nur eine Instanz aufweist. Wir zeigen die Unterschiede zwischen Declaration und Expression auf.
+tags: Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Object Declaration vs. Object Expression
 In Kotlin stellt `object` ein Singleton dar. Ein Singleton ist per Definition eine Klasse, die nur eine Instanz aufweist.
 

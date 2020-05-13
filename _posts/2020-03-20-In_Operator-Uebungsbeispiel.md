@@ -1,3 +1,12 @@
+---
+title: Beispielcode zum IN-Operator in Kotlin
+description: Wie wenden wir den IN-Operator in Kotlin an? Hier einige Quellcode-Beispiele.
+tags: in-operator, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Übungsbeispiel zum ```in```-Operator
 Implementiere die Funktion ```isValidIdentifier```. Ein valider Identifier weist folgende Merkmale auf:
 

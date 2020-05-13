@@ -1,3 +1,12 @@
+---
+title: Erweiterungsfunktionen (extension functions) in Kotlin
+description: Wir zeigen, was Erweiterungsfunktionen (extension functions) in Kotlin sind und wie wir sie einsetzen können.
+tags: extension functions, erweiterungsfunktionen, extensions, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Extension Functions
 Mithilfe von Extension-Functions können wir Klassen in Kotlin erweiteren. Dies ist ein Features von Kotlin, das in Java kein direktes Pendant hat.
 

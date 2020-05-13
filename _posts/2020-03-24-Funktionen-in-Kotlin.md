@@ -1,3 +1,12 @@
+---
+title: Eigene Funktionen in Kotlin
+description: Wie können wir in Kotlin eigene Funktionen deklarieren? Welche Möglichkeiten stellt uns Kotlin hinsichtlich Funktionen und Methoden zur Verfügung?
+tags: Functions, Funktionen, Methoden, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Funktionen in Kotlin
 
 Funktionen werden in Kotlin nach folgendem Schema definiert:

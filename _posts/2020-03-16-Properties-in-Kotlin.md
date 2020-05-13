@@ -1,3 +1,12 @@
+---
+title: Properties - Eigenschaften -  in Kotlin
+description: Wir zeigen, was properties (bzw. Eigenschaften) von Klassen in Kotlin sind und wie wir diese in der Programmierung einsetzen können.
+tags: properties, eigenschaften, klassen, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Properties in Kotlin
 In Kotlin werden Properties, die in Java z.B. über das Java-Beans Konzept realisiert werden, als eigenes Sprach-Features realisiert.
 

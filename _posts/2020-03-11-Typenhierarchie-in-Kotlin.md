@@ -1,3 +1,12 @@
+---
+title: Die Typenhierarchie in Kotlin
+description: Welche Datentypen stehen in Kotlin zur Verfügung? Wie sieht die Typhierarchie aus?
+tags: Datentypen, typen, Typhierarchie, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Das Typsystem von Kotlin
 Abschließend wollen wir noch ein paar _Spezialitäten_ hinsichtlich der Unterschiede im Typensystem zwischen Java und Kotlin besprechen.
 

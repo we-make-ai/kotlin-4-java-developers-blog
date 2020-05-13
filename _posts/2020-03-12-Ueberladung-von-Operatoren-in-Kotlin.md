@@ -1,3 +1,12 @@
+---
+title: Überladung von Operatoren in Kotlin
+description: Wie können wir in Kotlin Operatoren von bestehenden und eigenen Datentypen überladen?
+tags: Operatorüberladung, operatoren, Java, Kotlin, Programmierung, Softwareentwicklung, Programmiersprache
+lang: de
+author: bernhard_j_mayr
+layout: post
+---
+
 # Überladung von Operatoren in Kotlin
 Um Operatoren in Kotlin zu überladen, schreiben wir einfach eine eigene Klasse und markieren diese mit dem Schlüsselwort `operator`. Dies ist sowohl für primitive Typen, wie auch für eigene Klassen möglich.
 
