@@ -14,12 +14,19 @@ Daten, künstliche Intelligenz, Machine Learning, Deep Learning... sind für uns
 
 _Steigern Sie Ihren Unternehmenserfolg durch gezielten und geplanten Einsatz von KI._
 
-In diesem Blog wollen wir uns vor allem auf die wirtschaftlichen Aspekte vom Einsatz künstlicher Intelligenz konzentrieren, aber auch auf Beispiele verweisen, wie der KI-Einsatz konkret aussehen kann.
+In unserem [Blog - künstliche-Intelligenz-in-a-Nutshell](https://wwww.kuenstliche-intelligenz-in-a-nutshell.at) wollen wir uns vor allem auf die wirtschaftlichen Aspekte vom Einsatz künstlicher Intelligenz konzentrieren, aber auch auf Beispiele verweisen, wie der KI-Einsatz konkret aussehen kann.
 
 Für den Inhalt verantwortlich:  
 
-[we-make.ai](https://www.we-make.ai) | Dr. Bernhard J. Mayr, MBA
+[we-make.ai - Agentur für künstliche Intelligenz](https://www.we-make.ai) | Dr. Bernhard J. Mayr, MBA
+
+Neu: [Die ai academy von we-make.ai](http://academy.we-make.ai/)
+
 Tulpenweg 10
 4600 Wels, Austria
 
 [Datenschutzerklärung](./datenschutzerklaerung.md)
+
+[doctory.at - Arztsoftware aus Österreich neu gedacht](https://www.doctory.at)
+
+[kurkuma.online - Infoportal rund um die Kurkuma Wurzel](https://www.kurkuma.online)
