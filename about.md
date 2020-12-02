@@ -14,7 +14,7 @@ Daten, künstliche Intelligenz, Machine Learning, Deep Learning... sind für uns
 
 _Steigern Sie Ihren Unternehmenserfolg durch gezielten und geplanten Einsatz von KI._
 
-In unserem [Blog - künstliche-Intelligenz-in-a-Nutshell](https://wwww.kuenstliche-intelligenz-in-a-nutshell.at) wollen wir uns vor allem auf die wirtschaftlichen Aspekte vom Einsatz künstlicher Intelligenz konzentrieren, aber auch auf Beispiele verweisen, wie der KI-Einsatz konkret aussehen kann.
+In unserem [Blog - künstliche-Intelligenz-in-a-Nutshell](https://www.kuenstliche-intelligenz-in-a-nutshell.at) wollen wir uns vor allem auf die wirtschaftlichen Aspekte vom Einsatz künstlicher Intelligenz konzentrieren, aber auch auf Beispiele verweisen, wie der KI-Einsatz konkret aussehen kann.
 
 Für den Inhalt verantwortlich:  
 
@@ -29,4 +29,4 @@ Tulpenweg 10
 
 [doctory.at - Arztsoftware aus Österreich neu gedacht](https://www.doctory.at)
 
-[kurkuma.online - Infoportal rund um die Kurkuma Wurzel](https://www.kurkuma.online)
+[kurkuma.online - Infoportal rund um die Kurkuma Wurzel](https://kurkuma.online)
