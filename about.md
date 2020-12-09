@@ -27,6 +27,6 @@ Tulpenweg 10
 
 [Datenschutzerklärung](./datenschutzerklaerung.md)
 
-[doctory.at - Arztsoftware aus Österreich neu gedacht](https://www.doctory.at)
+[doctory.at - Arztsoftware aus Österreich neu gedacht](https://doctory.at)
 
 [kurkuma.online - Infoportal rund um die Kurkuma Wurzel](https://kurkuma.online)
