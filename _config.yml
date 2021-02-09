@@ -31,6 +31,9 @@ defaults:
       path: ""
       type: "posts"
 
+after_footer_scripts:
+  - /assets/js/cookie-consent.js
+
 # Set this to true to get LaTeX math equation support
 use_math: true
 
