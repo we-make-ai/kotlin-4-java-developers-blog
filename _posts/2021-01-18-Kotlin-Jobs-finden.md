@@ -7,7 +7,7 @@ author: bernhard_j_mayr
 layout: post
 ---
 
-# Bekommen ich als Kotlin Developer einen guten Job?
+# Bekomme ich als Kotlin Developer einen guten Job?
 
 Natürlich stellt sich zuerst die Frage, was einen "_guten_" Job ausmacht. Dies ist meist individuelles Empfinden.
 
