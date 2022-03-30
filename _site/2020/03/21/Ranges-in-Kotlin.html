@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale:alternate" content="de_AT" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+  <link rel="canonical" href="kotlin4java.online/2020/03/21/Ranges-in-Kotlin.html"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Ranges in Kotlin | Kotlin 4 Java Developers</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Ranges in Kotlin" />
+<meta name="author" content="Bernhard J. Mayr" />
+<meta property="og:locale" content="de" />
+<meta name="description" content="Mithilfe von ranges erhalten wir in Kotlin auf einfache Weise Wertebereiche. Wir zeigen, wie wir ranges in Verbindung mit dem IN-Operator verwenden." />
+<meta property="og:description" content="Mithilfe von ranges erhalten wir in Kotlin auf einfache Weise Wertebereiche. Wir zeigen, wie wir ranges in Verbindung mit dem IN-Operator verwenden." />
+<link rel="canonical" href="kotlin4java.online/2020/03/21/Ranges-in-Kotlin.html" />
+<meta property="og:url" content="kotlin4java.online/2020/03/21/Ranges-in-Kotlin.html" />
+<meta property="og:site_name" content="Kotlin 4 Java Developers" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-21T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Ranges in Kotlin" />
+<script type="application/ld+json">
+{"description":"Mithilfe von ranges erhalten wir in Kotlin auf einfache Weise Wertebereiche. Wir zeigen, wie wir ranges in Verbindung mit dem IN-Operator verwenden.","mainEntityOfPage":{"@type":"WebPage","@id":"kotlin4java.online/2020/03/21/Ranges-in-Kotlin.html"},"url":"kotlin4java.online/2020/03/21/Ranges-in-Kotlin.html","headline":"Ranges in Kotlin","dateModified":"2020-03-21T00:00:00+01:00","datePublished":"2020-03-21T00:00:00+01:00","@type":"BlogPosting","author":{"@type":"Person","name":"Bernhard J. Mayr"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="kotlin4java.online/feed.xml" title="Kotlin 4 Java Developers" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-152392799-4', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script src="/assets/lazysizes.min.js" async></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+  
+
+  
+
+  <script>
+  function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+  }
+  window.onload = wrap_img;
+  </script>
+
+</head><body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kotlin 4 Java Developers</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">Über uns</a><a class="page-link" href="/datenschutzerklaerung.html">Datenschutzerklärung</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://amzn.to/3curXKy" target="_blank" alt="kotlin-4-java-developers">
+                <img src="/images/kotlin-4-java-developers-buch.webp" alt="Logo Buch Kotlin4Java Developers" width="180px" />
+              </a>
+          </div>
+
+          Alle Informationen zur <h1>Programmierung mit Kotlin</h1> haben wir kompakt in unserem Buch <a href="https://amzn.to/3curXKy" alt="Kotlin4JavaDevelopers - unser Buch auf Amazon" target="_blank"><b>Kotlin 4 Java Developers</b></a> zusammengefasst.
+          <br/><br/>
+ </div>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Ranges in Kotlin</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-03-21T00:00:00+01:00" itemprop="datePublished">
+        2020-03-21
+      </time>• 
+            
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name"><a href="https://www.linkedin.com/in/bemayr/">Bernhard J. Mayr</a></span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="das-schlüsselwort-in-in-kotlin">Das Schlüsselwort <code class="language-plaintext highlighter-rouge">in</code> in Kotlin</h2>
+<p>Ein wesentliches Schlüsselwort in Kotlin in Verbindung mit Ranges ist <code class="language-plaintext highlighter-rouge">in</code>. Dieses hat keine direkte Entsprechung in Java.</p>
+
+<p>Das Schlüsselwort <code class="language-plaintext highlighter-rouge">in</code> können wir in zwei Use-Cases verwenden:</p>
+
+<ul>
+  <li>Mit einer <code class="language-plaintext highlighter-rouge">for</code>-Schleife zur Iteration über ein Intervall:</li>
+</ul>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">)</span> <span class="p">{</span><span class="o">..</span><span class="p">.}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Zur Überprüfung, ob ein Element in einem Range enthalten ist:</li>
+</ul>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="k">in</span> <span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span>
+</code></pre></div></div>
+
+<h3 id="anwendungsbeispiel">Anwendungsbeispiel</h3>
+<p>Folgende Funktion prüft für ein Zeichen, ob es ein Klein- oder Großbuchstabe ist:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">isLetter</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="nc">Char</span><span class="p">)</span> <span class="p">=</span> <span class="n">c</span> <span class="k">in</span> <span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span> <span class="p">||</span> <span class="n">c</span> <span class="k">in</span> <span class="sc">'A'</span><span class="o">..</span><span class="sc">'Z'</span>
+</code></pre></div></div>
+
+<p>Das Konstrukt <code class="language-plaintext highlighter-rouge">c in 'a'..'z'</code> ist in diesem Beispiel das Äquivalent zu folgendem Ausdruck <code class="language-plaintext highlighter-rouge">'a' &lt;= c &amp;&amp; c &lt;= 'z'</code>. <em>Während des Compile Vorgangs wird genau dieser Code vom Compiler erzeugt.</em></p>
+
+<h2 id="verneinung-vom-in-operator-in-kotlin">Verneinung vom <code class="language-plaintext highlighter-rouge">in</code> Operator in Kotlin</h2>
+<p>Der Operator <code class="language-plaintext highlighter-rouge">in</code> kann auch verneint werden:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">isNotDigit</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="nc">Char</span><span class="p">)</span> <span class="p">=</span> <span class="n">c</span> <span class="p">!</span><span class="k">in</span> <span class="sc">'0'</span><span class="o">..</span><span class="sc">'9'</span>
+</code></pre></div></div>
+
+<p>Diese Funktion prüft, ob das übergebene Zeichen keine Ziffer ist - also nicht im Intervall (<em>range</em>) von 0 bis 9 enthalten ist.</p>
+
+<h2 id="der-inoperator-in-verbindung-mit-when">Der <code class="language-plaintext highlighter-rouge">in</code>Operator in Verbindung mit <code class="language-plaintext highlighter-rouge">when</code></h2>
+<p>Der <code class="language-plaintext highlighter-rouge">in</code>Operator kommt häufig in Verbindung mit <code class="language-plaintext highlighter-rouge">when</code> zum Einsatz:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">recognizeChar</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="nc">Char</span><span class="p">)</span> <span class="p">=</span> <span class="k">when</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">in</span> <span class="sc">'0'</span><span class="o">..</span><span class="sc">'9'</span> <span class="p">-&gt;</span> <span class="s">"It's a digit!"</span>
+    <span class="k">in</span> <span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">,</span> <span class="k">in</span> <span class="sc">'A'</span><span class="o">..</span><span class="sc">'Z'</span> <span class="p">-&gt;</span> <span class="s">"It's a letter"</span>
+    <span class="k">else</span> <span class="p">-&gt;</span> <span class="s">"Unknown char"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="ranges-verschiedener-typen">Ranges verschiedener Typen</h2>
+<p>Ranges können wir in Kotlin auf Basis verschiedener Typen erstellen. Natürlich als Zahlenintervalle auf Basis von <code class="language-plaintext highlighter-rouge">Int</code>. Doch auch mit <code class="language-plaintext highlighter-rouge">String</code>’s können Intervalle erstellt werden.</p>
+
+<p>Intervalle können auf Basis jedes vergleichbaren Typs in Kotlin aufgebaut werden.</p>
+
+<p><img src="/images/370_Ranges_in_Kotlin-54f279d4.webp" alt="" /></p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// int ranges</span>
+<span class="kd">val</span> <span class="py">intRange</span><span class="p">:</span> <span class="nc">IntRange</span> <span class="p">=</span> <span class="mi">1</span><span class="o">..</span><span class="mi">9</span>
+<span class="kd">val</span> <span class="py">anotherIntRange</span><span class="p">:</span> <span class="nc">IntRange</span> <span class="p">=</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">10</span>
+<span class="c1">// char range</span>
+<span class="kd">val</span> <span class="py">charRange</span><span class="p">:</span> <span class="nc">CharRange</span> <span class="p">=</span> <span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span>
+<span class="c1">// string range</span>
+<span class="kd">val</span> <span class="py">stringRange</span><span class="p">:</span> <span class="nc">ClosedRange</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">&gt;</span> <span class="p">=</span> <span class="s">"ab"</span><span class="o">..</span><span class="s">"az"</span>
+<span class="c1">// range of custom date class (would have to declare the class MyDate!</span>
+<span class="kd">val</span> <span class="py">dateRange</span><span class="p">:</span> <span class="nc">ClosedRange</span><span class="p">&lt;</span><span class="nc">MyDate</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">startDate</span><span class="o">..</span><span class="n">endDate</span>
+</code></pre></div></div>
+
+<p>Strings werden in Kotlin wie auch in Java lexikographisch (<em>also nach dem Alphabet</em>) verglichen. Der Compiler erzeugt also im Hintergrund einen Aufruf der <code class="language-plaintext highlighter-rouge">compareTo</code>-Methode.</p>
+
+<p><img src="/images/370_Ranges_in_Kotlin-1bb9abd5.webp" alt="" /></p>
+
+<p><em>Beispiel:</em></p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"ball"</span> <span class="k">in</span> <span class="s">"a"</span><span class="o">..</span><span class="s">"k"</span> <span class="c1">// --&gt; true</span>
+<span class="s">"zoo"</span>  <span class="k">in</span> <span class="s">"a"</span><span class="o">..</span><span class="s">"k"</span> <span class="c1">// --&gt; false</span>
+</code></pre></div></div>
+
+<p>Während in Java die <code class="language-plaintext highlighter-rouge">compareTo</code>-Methode explizit aufgerufen werden muss, kann in Kotlin für jeden Typen, der das <code class="language-plaintext highlighter-rouge">Comparable</code>-Interface erfüllt, ein Range definiert werden. So können wir z.B. ein Datum direkt über Vergleichsoperatoren miteinander vergleichen:</p>
+
+<pre><code class="language-Kotlin">class MyDate : Comparable&lt;MyDate&gt;
+
+if (myDate.compareTo(startDate) &gt;= 0 &amp;&amp;
+   myDate.compareTo(endDate) &lt;= 0) { ... }
+</code></pre>
+
+<p>Einfacher können wir das folgendermaßen realisieren:</p>
+
+<pre><code class="language-Kotlin">if (myDate &gt;= startDate &amp;&amp; myDate &lt;= endDate) { ... }
+</code></pre>
+
+<p>Oder mittels einer Prüfung auf ein Intervall:</p>
+
+<pre><code class="language-Kotlin">if (myDate in startDate..endDate) { ... }
+</code></pre>
+
+  </div><a class="u-url" href="/2020/03/21/Ranges-in-Kotlin.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+      <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">
+              <img alt="Die KI Revolution. Warum Unternehmen ohne KI keine Zukunft haben." data-src="/images/index-84c9d1a4.webp" class="lazyload" width="180px" />
+              </a>
+          </div>
+
+          <strong>In unserem Buch <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">Die KI-Revolution. Warum Unternehmen ohne KI keine Zukunft haben.</a> </strong> erläutern wir wie man künstliche Intelligenz aus wirtschaftlicher Perspektive im Unternehmen umsetzen kann.
+
+          Projekte aus verschiedenen Anwendungsgebiten der KI stellen wir auch auf unseren linkedin-Showcase Seiten aus:
+          <br/><br/>
+          <p><strong>Bildverarbeitung:</strong> <a alt="ImageSegmentation" href="https://www.linkedin.com/showcase/image-segmentation/">ImageSegmentation</a></p>
+              <p><strong>Bildklassifizierung:</strong> <a href="https://detect-eye-diseases.herokuapp.com/">Erkennen von Augenerkrankungen mittels KI</a></p>
+              <p><strong>Deep Learning fürs Marketing:</strong> der <a alt="aitracer" href="https://www.linkedin.com/showcase/ai.tracer/"> aitracer</a></p>
+
+      </div>
+
+    <h2 class="footer-heading">Der Blog zu künstlicher Intelligenz von <a href="we-make.ai">we-make.ai</a></h2>
+    <h3>Künstliche Intelligenz, Machine Learning, Deep Learning</h3>
+    <a href="https://www.we-make.ai"><img data-src="/images/we-make-ai-logo.webp" class="lazyload" alt="Logo von we-make.ai"/></a>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kotlin 4 Java Developers</li><li><a class="u-email" href="mailto:info@we-make.ai">info@we-make.ai</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.linkedin.com/in/we-make-ai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">linkedin</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kotlin, Java, Programmierung</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" 
+data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#237afc"
+    },
+    "button": {
+      "background": "#fff",
+      "text": "#237afc"
+    }
+  },
+  "type": "opt-in"
+});
+</script></body>
+
+</html>

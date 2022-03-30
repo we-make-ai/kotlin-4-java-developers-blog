@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale:alternate" content="de_AT" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+  <link rel="canonical" href="kotlin4java.online/2020/03/15/Objektorientierung-in-Kotlin.html"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Objektorientierung in Kotlin | Kotlin 4 Java Developers</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Objektorientierung in Kotlin" />
+<meta name="author" content="Bernhard J. Mayr" />
+<meta property="og:locale" content="de" />
+<meta name="description" content="Wie wird Objektorientierung in Kotlin umgesetzt?" />
+<meta property="og:description" content="Wie wird Objektorientierung in Kotlin umgesetzt?" />
+<link rel="canonical" href="kotlin4java.online/2020/03/15/Objektorientierung-in-Kotlin.html" />
+<meta property="og:url" content="kotlin4java.online/2020/03/15/Objektorientierung-in-Kotlin.html" />
+<meta property="og:site_name" content="Kotlin 4 Java Developers" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-15T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Objektorientierung in Kotlin" />
+<script type="application/ld+json">
+{"description":"Wie wird Objektorientierung in Kotlin umgesetzt?","mainEntityOfPage":{"@type":"WebPage","@id":"kotlin4java.online/2020/03/15/Objektorientierung-in-Kotlin.html"},"url":"kotlin4java.online/2020/03/15/Objektorientierung-in-Kotlin.html","headline":"Objektorientierung in Kotlin","dateModified":"2020-03-15T00:00:00+01:00","datePublished":"2020-03-15T00:00:00+01:00","@type":"BlogPosting","author":{"@type":"Person","name":"Bernhard J. Mayr"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="kotlin4java.online/feed.xml" title="Kotlin 4 Java Developers" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-152392799-4', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script src="/assets/lazysizes.min.js" async></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+  
+
+  
+
+  <script>
+  function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+  }
+  window.onload = wrap_img;
+  </script>
+
+</head><body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kotlin 4 Java Developers</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">Über uns</a><a class="page-link" href="/datenschutzerklaerung.html">Datenschutzerklärung</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://amzn.to/3curXKy" target="_blank" alt="kotlin-4-java-developers">
+                <img src="/images/kotlin-4-java-developers-buch.webp" alt="Logo Buch Kotlin4Java Developers" width="180px" />
+              </a>
+          </div>
+
+          Alle Informationen zur <h1>Programmierung mit Kotlin</h1> haben wir kompakt in unserem Buch <a href="https://amzn.to/3curXKy" alt="Kotlin4JavaDevelopers - unser Buch auf Amazon" target="_blank"><b>Kotlin 4 Java Developers</b></a> zusammengefasst.
+          <br/><br/>
+ </div>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Objektorientierung in Kotlin</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-03-15T00:00:00+01:00" itemprop="datePublished">
+        2020-03-15
+      </time>• 
+            
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name"><a href="https://www.linkedin.com/in/bemayr/">Bernhard J. Mayr</a></span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Im Allgemeinen werden in Kotlin diesbezüglich keine vollständig neuen Konzepte eingeführt. Dennoch bringt Kotlin einigen Erweiterungen, die das Arbeiten angenehmer machen.</p>
+
+<p>Im Vergleich zu Java verfügt Kotlin auch hinsichtlich der Objektorientierung über eine etwas andere Syntax. Da unser Ziel eine Einführung in Kotlin für Java-Entwickler ist, werden wir nicht auf Konzepte der objektorientierten Programmierung im Detail eingehen, sondern nur die Unterschiede zwischen Kotlin und Java herausarbeiten.</p>
+
+<p>In Kotlin ist jede Deklaration <code class="language-plaintext highlighter-rouge">public</code> und <code class="language-plaintext highlighter-rouge">final</code> als Standard.</p>
+
+<p><strong>Varianten:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">open</code>: Wir definieren die Klasse als veränderbar</li>
+  <li><code class="language-plaintext highlighter-rouge">internal</code>: Da es in Kotlin die von Java gewohnte Sichtbarkeit <code class="language-plaintext highlighter-rouge">package private</code> nicht gibt. Diese Deklarationen sind dann innerhalb des gleichen Moduls sichtbar.</li>
+</ul>
+
+<p>Ein <strong>Modul</strong> in Kotlin ist ein Set aus verschiedenen Kotlin-Dateien, die gemeinsam kompiliert werden:</p>
+<ul>
+  <li>ein IntelliJ IDEA Modul</li>
+  <li>ein Maven Projekt</li>
+  <li>ein Gradle Projekt</li>
+</ul>
+
+<p><strong>Übersicht über die Modifizierer in Kotlin:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">final</code>: Die Deklaration <em>kann nicht</em> überschrieben werden.</li>
+  <li><code class="language-plaintext highlighter-rouge">open</code>: Gegenteil von <code class="language-plaintext highlighter-rouge">final</code> - Die Deklaration <em>kann</em> überschrieben werden.</li>
+  <li><code class="language-plaintext highlighter-rouge">abstract</code>: Die Deklaration <em>muss</em> überschrieben werden.</li>
+  <li><code class="language-plaintext highlighter-rouge">override</code>: Überschreibt einen Member in der Superklasse bzw. ein Interface.</li>
+</ul>
+
+<p><strong>Übersicht über die Sichtbarkeitsmodifizierer:</strong></p>
+
+<p>Modifizierer | Klassen-Member | Top-Level Deklaration
+ —- | —- | —-
+ <code class="language-plaintext highlighter-rouge">public</code> &lt;td colspan=2&gt;überall sichtbar
+ <code class="language-plaintext highlighter-rouge">internal</code> &lt;td colspan=2&gt;  sichtbar im gleichen Modul
+ <code class="language-plaintext highlighter-rouge">protected</code> | sichtbar in Subklassen | – 
+ <code class="language-plaintext highlighter-rouge">private</code> | sichtbar innerhalb der Klasse | sichtbar innerhalb der Datei</p>
+
+<p>Wie sieht dies intern aus, wenn der Kompiler zu Bytecode übersetzt? Vergleichen wir dazu die Kotlin Sichtbarkeiten mit denen aus Java.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Kotlin</th>
+      <th>Java</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">public</code></td>
+      <td><code class="language-plaintext highlighter-rouge">public</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">protected</code></td>
+      <td><code class="language-plaintext highlighter-rouge">protected</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">private</code></td>
+      <td><code class="language-plaintext highlighter-rouge">private</code> / <code class="language-plaintext highlighter-rouge">package private</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">internal</code></td>
+      <td><code class="language-plaintext highlighter-rouge">public</code> in Verb. mit Änderungen in der Bezeichnung</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Bei <code class="language-plaintext highlighter-rouge">internal</code> wird ein zufälliger interner, langer Name für die Klasse generiert, der nicht rein zufällig vom Programmierer an anderer Stelle verwendet werden kann.</p>
+
+<p><strong>Kotlin:</strong></p>
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+    <span class="k">internal</span> <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Java:</strong></p>
+<pre><code class="language-Java">public final class MyClass {
+    public final void foo$prodcution_sources_for_module_examples_main()
+}
+</code></pre>
+
+<h2 id="package-struktur">Package-Struktur</h2>
+<p>In Java besteht die Empfehlung, jede Klasse in eine eigene Datei zu packen. Dies ist in Kotlin nicht erforderlich. Insbesondere bei reinen Datenklassen ist es komfortabel, diese in einer gemeinsamen Datei zusammenzufassen.</p>
+
+<p><img src="/images/430_Objektorientierung_in_Kotlin-a30e3eb6.webp" alt="" /></p>
+
+<p>In Kotlin muss der Name vom Package nicht mit der tatsächlichen Dateistruktur übereinstimmen - wir können einen beliebigen Namen für das Package wählen. Im Kotlin-Styleguide wird aber empfohlen, genauso wie in Java den eigenen Namen als Top-Level-Bezeichnung für das Package zu wählen.</p>
+
+<h2 id="konstruktoren-in-kotlin">Konstruktoren in Kotlin</h2>
+<p>Mithilfe von Konstruktoren können wir Objekte initialisieren:</p>
+
+<pre><code class="language-Kotlin">class A
+val a = A()
+</code></pre>
+
+<p>In Kotlin verwenden wir im Gegensatz zu Java kein Schlüsselwort <code class="language-plaintext highlighter-rouge">new</code>. Der Konstruktor wird in Kotlin wie eine gewöhnliche Funktion aufgerufen.</p>
+
+<p>Auch wenn wir keinen Konstruktor innerhalb der Klasse definieren, können wir Objekte erzeugen, da automatisch - wie in Java - ein parameterloser Konstruktor generiert wird.</p>
+
+<p>In Kotlin müssen wir den Code für den Konstruktor nicht explizit schreiben. Dieser wird aus der Klassendefinition abgeleitet. Die Initialbelegung der Member erfolgt in dem <code class="language-plaintext highlighter-rouge">init</code>-Abschnitt.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">age</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span>
+
+    <span class="nf">init</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="n">name</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Setzten wir vor einen Wert das Schlüsselwort <code class="language-plaintext highlighter-rouge">val</code> oder <code class="language-plaintext highlighter-rouge">var</code> wird automatisch ein Property in der Klasse erstellt. Fehlt dieses Schlüsselwort, so steht die Variable nur innerhalb des Konstruktors zur Verfügung.</p>
+
+<p><img src="/images/430_Objektorientierung_in_Kotlin-8905896e.webp" alt="" /></p>
+
+<p>Wenn wir die Sichtbarkeit des Konstrutors verändern wollen, so können wir das explizite Schlüsselwort <code class="language-plaintext highlighter-rouge">construtor</code> verwenden:</p>
+
+<pre><code class="language-Kotlin">class InternalComponent
+internal constructor(name: String) {
+
+}
+</code></pre>
+
+<h3 id="zusätzliche-konstruktoren-in-einer-klasse">Zusätzliche Konstruktoren in einer Klasse</h3>
+<p>Innerhalb einer Klasse können beliebig viele zusätzliche Konstruktoren erstellt werden. Jeder dieser zusätzlichen Konstruktoren muss jedoch wiederum einen bereits bestehenden Konstruktor aufrufen.</p>
+
+<p><img src="/images/430_Objektorientierung_in_Kotlin-da7b8493.webp" alt="" /></p>
+
+<p>Die bereits existierenden Konstruktoren einer Klasse können mit dem Schlüsselwort <code class="language-plaintext highlighter-rouge">this</code> angesprochen werden.</p>
+
+<h2 id="syntax-zur-vererbung">Syntax zur Vererbung</h2>
+<p>Vereerbung wird in Kotlin mithilfe des Doppelpunkts (<code class="language-plaintext highlighter-rouge">:</code>) ausgedrückt. Müssen dabei Parameterwerte an den Konstruktor der Elternklasse übergeben werden, so werden diese innerhalb von runden Klammern eingefügt.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">open</span> <span class="kd">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span>
+<span class="kd">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Parent</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Mithilfe des Schlüsselworts <code class="language-plaintext highlighter-rouge">super</code> kann auf den Konstruktor der Elternklasse zugegriffen werden.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">open</span> <span class="kd">class</span> <span class="nc">Parent</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span>
+<span class="kd">class</span> <span class="nc">Child</span> <span class="p">:</span> <span class="nc">Parent</span> <span class="p">{</span>
+    <span class="k">constructor</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="k">super</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="modifizierer-zu-klassen">Modifizierer zu Klassen</h2>
+<p>In Kotlin können Klassen durch verschiedene Modifizierer anderes Verhalten aufzeigen.</p>
+
+<h3 id="enumerations-mit-enum">Enumerations mit <code class="language-plaintext highlighter-rouge">enum</code></h3>
+<p>Das Schlüsselwort <code class="language-plaintext highlighter-rouge">enum</code> generiert eine Aufzählungsklasse mit festen Werten. Im Unterschied zu Java stellt <code class="language-plaintext highlighter-rouge">enum</code> keine eigene Instanz dar, sondern ist nur ein Modifizierer für Klassen.</p>
+
+<pre><code class="language-Kotlin">enum class Color {
+    BLUE, RED, ORANGE
+}
+
+fun getDescription(color: Color) =
+    when (color) {
+        Color.BLUE -&gt; "cold"
+        Color.ORANGE -&gt; "mild"
+        Color.RED -&gt; "hot"
+    }
+</code></pre>
+
+<p>Auf enums kann über den vollständigen Namen zugegriffen werden. Möchten wir die Aufzählung ohne den gesamten Bezeichner verwenden, so muss das enum importiert werden:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">packageName.Color.*</span>
+</code></pre></div></div>
+
+<p>Da ein enum eine gewöhnliche Klasse ist, können wir in Kotlin in Enums auch Member-Funktionen und Properties definieren.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="kd">class</span> <span class="nc">Color</span><span class="p">(</span>
+    <span class="n">varl</span> <span class="n">r</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="kd">val</span> <span class="py">g</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="kd">val</span> <span class="py">b</span><span class="p">:</span> <span class="nc">Int</span>
+<span class="p">)</span> <span class="p">{</span>
+    <span class="nc">BLUE</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="nc">ORANGE</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">165</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nc">RED</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">fun</span> <span class="nf">rgb</span><span class="p">()</span> <span class="p">=</span> <span class="p">(</span><span class="n">r</span> <span class="p">*</span> <span class="mi">256</span> <span class="p">+</span> <span class="n">g</span><span class="p">)</span> <span class="p">*</span> <span class="mi">256</span> <span class="p">+</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><em>In diesem Fall benötigen wir in Kotlin ein Semikolon <code class="language-plaintext highlighter-rouge">;</code>, um die Liste der Enum-Konstanten von den Klassenmembern zu trennen!</em></p>
+
+<p>Nachdem wir die Properties in einer enum Klasse definiert haben, können wir direkt auf diese zugreifen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">println</span><span class="p">(</span><span class="nc">BLUE</span><span class="p">.</span><span class="n">r</span><span class="p">)</span> <span class="c1">// 0</span>
+<span class="nf">println</span><span class="p">(</span><span class="nc">BLUE</span><span class="p">.</span><span class="nf">rgb</span><span class="p">())</span> <span class="c1">// 255</span>
+</code></pre></div></div>
+
+<h3 id="datenklassen">Datenklassen</h3>
+<p>Datenklassen in Kotlin können durch verschiedene Modifier im Verhalten angepasst werden.</p>
+
+<pre><code class="language-Kotlin">data class Contact(val name: String, val address: String)
+
+contact.copy(address = "new Adress")
+</code></pre>
+
+<p>Mittels <code class="language-plaintext highlighter-rouge">copy()</code> kann eine Instanz der Datenklasse kopiert werden. In diesem Fall weisen wir eine neue Adresse zu. Die restlichen Werte der Member bleiben gleich.</p>
+
+<p>Beim Objektvergleich zwischen Instanzen von Datenklassen unterscheiden wir in Kotlin zwischen <code class="language-plaintext highlighter-rouge">==</code> und <code class="language-plaintext highlighter-rouge">===</code>.</p>
+
+<p><img src="/images/430_Objektorientierung_in_Kotlin-0929b325.webp" alt="" /></p>
+
+<h3 id="klassen-als-sealed-deklarieren">Klassen als <code class="language-plaintext highlighter-rouge">sealed</code> deklarieren</h3>
+<p>In Kotlin können wir Klassen mittels des Schlüsselworts <code class="language-plaintext highlighter-rouge">sealed</code> deklarieren. Betrachten wir folgendes Beispiel. Wir haben ein Interface <code class="language-plaintext highlighter-rouge">Expr</code>, das einen Ausdruck darstellt. Davon leiten wir die Klassen <code class="language-plaintext highlighter-rouge">Num</code> und <code class="language-plaintext highlighter-rouge">Sum</code> ab. Mit der Funktion <code class="language-plaintext highlighter-rouge">eval</code> validieren wir die Ausdrücke.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">Expr</span>
+<span class="kd">class</span> <span class="nc">Nm</span><span class="p">(</span><span class="kd">val</span> <span class="py">value</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Expr</span>
+<span class="kd">class</span> <span class="nc">Sum</span><span class="p">(</span><span class="kd">val</span> <span class="py">left</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">,</span> <span class="kd">val</span> <span class="py">right</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Expr</span>
+
+<span class="k">fun</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">):</span> <span class="nc">Int</span> <span class="p">{</span> <span class="o">..</span><span class="p">.</span> <span class="p">}</span>
+
+<span class="c1">// 1+ (2 + 3)</span>
+<span class="nf">eval</span><span class="p">(</span><span class="nc">Sum</span><span class="p">(</span><span class="nc">Num</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nc">Sum</span><span class="p">(</span><span class="nc">Num</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nc">Num</span><span class="p">(</span><span class="mi">3</span><span class="p">))))</span> <span class="c1">// 6</span>
+</code></pre></div></div>
+
+<p>Wie implementieren wir diese Funktion <code class="language-plaintext highlighter-rouge">eval</code>? Wir könnten zB. eine <code class="language-plaintext highlighter-rouge">when</code> Expression verwenden. Innerhalb dieser <code class="language-plaintext highlighter-rouge">when</code>-Expression prüfen wir, ob der Audruck eine Zahl oder eine Summe darstellt und liefern den entsprechenden Wert zurück.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">):</span> <span class="nc">Int</span> <span class="p">=</span> <span class="k">when</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">is</span> <span class="nc">Num</span> <span class="p">-&gt;</span> <span class="n">e</span><span class="p">.</span><span class="n">value</span>
+    <span class="k">is</span> <span class="nc">Sum</span> <span class="p">-&gt;</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">left</span><span class="p">)</span> <span class="p">+</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Dieser Code lässt sich jedoch nicht kompilieren. Wir erhalten folgende Fehlermeldung:</p>
+<blockquote>
+  <p>Compiler error: ‘when’ expression must be exhaustive, add necessary ‘else’ branch</p>
+</blockquote>
+
+<p>Die Fehlermeldung ist auch hinsichtlich der Fehlerursache sehr aussagekräftig. Wir können nicht ausschließen, dass es nicht eine oder mehrere weitere Klassen gibt, die von <code class="language-plaintext highlighter-rouge">Expr</code> ableiten. Wir müssten also einen weiteren <code class="language-plaintext highlighter-rouge">else</code>-Zweig hinzufügen.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">):</span> <span class="nc">Int</span> <span class="p">=</span> <span class="k">when</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">is</span> <span class="nc">Num</span> <span class="p">-&gt;</span> <span class="n">e</span><span class="p">.</span><span class="n">value</span>
+    <span class="k">is</span> <span class="nc">Sum</span> <span class="p">-&gt;</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">left</span><span class="p">)</span> <span class="p">+</span> <span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
+    <span class="k">else</span> <span class="p">-&gt;</span> <span class="k">throw</span> <span class="nc">IllegalArgumentException</span><span class="p">(</span><span class="s">"Unknown expression"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Als Alternative können wir auch die Klasse <code class="language-plaintext highlighter-rouge">Expr</code> mit dem <code class="language-plaintext highlighter-rouge">sealed</code>-Modifzierer versehen und so ausschließen, dass weitere Klassen davon abgeleitet werden.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">sealed</span> <span class="kd">class</span> <span class="nc">Expr</span>
+<span class="kd">class</span> <span class="nc">Nm</span><span class="p">(</span><span class="kd">val</span> <span class="py">value</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Expr</span><span class="p">()</span>
+<span class="kd">class</span> <span class="nc">Sum</span><span class="p">(</span><span class="kd">val</span> <span class="py">left</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">,</span> <span class="kd">val</span> <span class="py">right</span><span class="p">:</span> <span class="nc">Expr</span><span class="p">)</span> <span class="p">:</span> <span class="nc">Expr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><em>Wir müssen nun jedoch sicherstellen, dass alle Kind-Klassen in der gleichen Datei wie die Elternklasse liegen.</em></p>
+
+<p><em>Beachte: In diesem Fall haben wir <code class="language-plaintext highlighter-rouge">Expr</code> als Klasse und nicht als Interface implementiert, was mit der zugrunde liegenden Implementierung zusammenhängt.</em></p>
+
+  </div><a class="u-url" href="/2020/03/15/Objektorientierung-in-Kotlin.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+      <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">
+              <img alt="Die KI Revolution. Warum Unternehmen ohne KI keine Zukunft haben." data-src="/images/index-84c9d1a4.webp" class="lazyload" width="180px" />
+              </a>
+          </div>
+
+          <strong>In unserem Buch <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">Die KI-Revolution. Warum Unternehmen ohne KI keine Zukunft haben.</a> </strong> erläutern wir wie man künstliche Intelligenz aus wirtschaftlicher Perspektive im Unternehmen umsetzen kann.
+
+          Projekte aus verschiedenen Anwendungsgebiten der KI stellen wir auch auf unseren linkedin-Showcase Seiten aus:
+          <br/><br/>
+          <p><strong>Bildverarbeitung:</strong> <a alt="ImageSegmentation" href="https://www.linkedin.com/showcase/image-segmentation/">ImageSegmentation</a></p>
+              <p><strong>Bildklassifizierung:</strong> <a href="https://detect-eye-diseases.herokuapp.com/">Erkennen von Augenerkrankungen mittels KI</a></p>
+              <p><strong>Deep Learning fürs Marketing:</strong> der <a alt="aitracer" href="https://www.linkedin.com/showcase/ai.tracer/"> aitracer</a></p>
+
+      </div>
+
+    <h2 class="footer-heading">Der Blog zu künstlicher Intelligenz von <a href="we-make.ai">we-make.ai</a></h2>
+    <h3>Künstliche Intelligenz, Machine Learning, Deep Learning</h3>
+    <a href="https://www.we-make.ai"><img data-src="/images/we-make-ai-logo.webp" class="lazyload" alt="Logo von we-make.ai"/></a>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kotlin 4 Java Developers</li><li><a class="u-email" href="mailto:info@we-make.ai">info@we-make.ai</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.linkedin.com/in/we-make-ai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">linkedin</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kotlin, Java, Programmierung</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" 
+data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#237afc"
+    },
+    "button": {
+      "background": "#fff",
+      "text": "#237afc"
+    }
+  },
+  "type": "opt-in"
+});
+</script></body>
+
+</html>

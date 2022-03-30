@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale:alternate" content="de_AT" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+  <link rel="canonical" href="kotlin4java.online/2020/03/18/Nullable-Types.html"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Nullable Typen in Kotlin | Kotlin 4 Java Developers</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Nullable Typen in Kotlin" />
+<meta name="author" content="Bernhard J. Mayr" />
+<meta property="og:locale" content="de" />
+<meta name="description" content="Standardmäßig dürfen in Kotlin Objekte nicht mit null-Werte belegt werden. Manchmal ist dies jedoch erforderlich, wir zeigen, wie wir nullable-types in Kotlin einsetzen." />
+<meta property="og:description" content="Standardmäßig dürfen in Kotlin Objekte nicht mit null-Werte belegt werden. Manchmal ist dies jedoch erforderlich, wir zeigen, wie wir nullable-types in Kotlin einsetzen." />
+<link rel="canonical" href="kotlin4java.online/2020/03/18/Nullable-Types.html" />
+<meta property="og:url" content="kotlin4java.online/2020/03/18/Nullable-Types.html" />
+<meta property="og:site_name" content="Kotlin 4 Java Developers" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-18T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Nullable Typen in Kotlin" />
+<script type="application/ld+json">
+{"description":"Standardmäßig dürfen in Kotlin Objekte nicht mit null-Werte belegt werden. Manchmal ist dies jedoch erforderlich, wir zeigen, wie wir nullable-types in Kotlin einsetzen.","mainEntityOfPage":{"@type":"WebPage","@id":"kotlin4java.online/2020/03/18/Nullable-Types.html"},"url":"kotlin4java.online/2020/03/18/Nullable-Types.html","headline":"Nullable Typen in Kotlin","dateModified":"2020-03-18T00:00:00+01:00","datePublished":"2020-03-18T00:00:00+01:00","@type":"BlogPosting","author":{"@type":"Person","name":"Bernhard J. Mayr"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="kotlin4java.online/feed.xml" title="Kotlin 4 Java Developers" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-152392799-4', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script src="/assets/lazysizes.min.js" async></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+  
+
+  
+
+  <script>
+  function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+  }
+  window.onload = wrap_img;
+  </script>
+
+</head><body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kotlin 4 Java Developers</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">Über uns</a><a class="page-link" href="/datenschutzerklaerung.html">Datenschutzerklärung</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://amzn.to/3curXKy" target="_blank" alt="kotlin-4-java-developers">
+                <img src="/images/kotlin-4-java-developers-buch.webp" alt="Logo Buch Kotlin4Java Developers" width="180px" />
+              </a>
+          </div>
+
+          Alle Informationen zur <h1>Programmierung mit Kotlin</h1> haben wir kompakt in unserem Buch <a href="https://amzn.to/3curXKy" alt="Kotlin4JavaDevelopers - unser Buch auf Amazon" target="_blank"><b>Kotlin 4 Java Developers</b></a> zusammengefasst.
+          <br/><br/>
+ </div>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Nullable Typen in Kotlin</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-03-18T00:00:00+01:00" itemprop="datePublished">
+        2020-03-18
+      </time>• 
+            
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name"><a href="https://www.linkedin.com/in/bemayr/">Bernhard J. Mayr</a></span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Vielen Programmieren unterlaufen immer wieder <code class="language-plaintext highlighter-rouge">Null-Pointer</code> Exceptions - also Ausnahmen, die auftreten, weil eine Variable referenziert wird, die auf keinen konkreten Speicherbereich zeigt. Solche Fehler vorab zu vermeiden ist oftmals schwierig, da sie erst zur Laufzeit auffallen. Daher kann auch der Compiler keine <code class="language-plaintext highlighter-rouge">null</code>-Pointer Exceptions im Vorfeld abfangen.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Nullpointer-Exceptions</code> fallen somit in die Kategorie der Laufzeitfehler. Diese kann der Compiler bei der statischen Prüfung nicht entdecken. Ein Ansatz moderner Programmiersprachen besteht daher darin, diese Exceptions auf die Ebene der Compile-Fehler herunterzuholen  und sie somit für den Compiler aufspürbar zu machen.</p>
+
+<p>In Kotlin unterscheiden wir <code class="language-plaintext highlighter-rouge">nullable</code> und <code class="language-plaintext highlighter-rouge">not nullable</code> Typen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">s1</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="s">"always not null"</span>
+<span class="kd">val</span> <span class="py">s2</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+</code></pre></div></div>
+
+<p>Verwenden wir beim Anlegen der Variablen einen klassischen Typ (wie in diesem Beispiel <code class="language-plaintext highlighter-rouge">String</code>) so sind diese Variablen automatisch <code class="language-plaintext highlighter-rouge">non-nullable</code>. Das bedeutet, dass nur tatsächliche Referenzen und keine <em>Null-Pointer</em> in dieser Variablen gespeichert werden können.</p>
+
+<p>Dies würde der Compiler in Kotlin also nicht zulassen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">s1</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="k">null</span>
+</code></pre></div></div>
+<p>Möchten wir der Variablen <code class="language-plaintext highlighter-rouge">s1</code> jedoch auch <code class="language-plaintext highlighter-rouge">null</code> zuweisen können, müsste die Variablendeklaration folgendermaßen aussehen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">s1</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+</code></pre></div></div>
+
+<p>Wir müssen also nur das <em>Fragezeichen</em> <code class="language-plaintext highlighter-rouge">?</code> an den Typ der Variablen anfügen.</p>
+
+<p>Greifen wir auf Methoden von <code class="language-plaintext highlighter-rouge">non-nullable</code> Variablen zu, so lässt dies auch der Compiler problemlos zu, da ja keine <code class="language-plaintext highlighter-rouge">Null-Pointer-Exception</code> auftreten kann. Wurde die zugrunde liegende Variable jedoch als <code class="language-plaintext highlighter-rouge">nullable</code> definiert, so fällt die Compiler-Prüfung negativ aus.</p>
+
+<p>Wir müssen daher zumindest prüfen, ob die Variablen-Referenz nicht <code class="language-plaintext highlighter-rouge">null</code> ist.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This works fine, because s1 is not-nullable</span>
+<span class="n">s1</span><span class="p">.</span><span class="n">length</span>
+
+<span class="c1">// This does not work, because s2 is nullable</span>
+<span class="n">s2</span><span class="p">.</span><span class="n">length</span>
+
+<span class="c1">// we have to check a possible null-reference</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">s2</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">s2</span><span class="p">.</span><span class="n">length</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="safe-access-ausdruck-in-kotlin">Safe-Access Ausdruck in Kotlin</h2>
+<p>Die vorherige Prüfung auf <code class="language-plaintext highlighter-rouge">null</code> Referenzen können wir in Kotlin jedoch eleganter als <code class="language-plaintext highlighter-rouge">safe access expression</code> formulieren, indem wir einfach ein <code class="language-plaintext highlighter-rouge">?</code> vor den Funktionsaufruf stellen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s2</span><span class="o">?.</span><span class="n">length</span>
+</code></pre></div></div>
+
+<p><img src="/images/400_Nullable_Types-443f1451.webp" alt="Zugriff auf nullable Variablen" /></p>
+
+<p>Der <code class="language-plaintext highlighter-rouge">safe access</code> prüft also intern, ob die Variable eine <code class="language-plaintext highlighter-rouge">Null</code>-Referenz beinhaltet und gibt dann direkt <code class="language-plaintext highlighter-rouge">null</code> zurück. Ansonsten wird der Funktionsaufruf durchgeführt.</p>
+
+<p>Mithilfe eines <em>safe-access</em> können wir die Ausdrücke vereinfachen, wenn wir den Rückgabewert eines Funktionsaufrufs verwenden möchten:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span>
+<span class="c1">// Without safe-access-expression</span>
+<span class="kd">val</span> <span class="py">length</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span> <span class="k">else</span> <span class="k">null</span>
+<span class="c1">// with safe-access-expression</span>
+<span class="kd">val</span> <span class="py">length</span> <span class="p">=</span> <span class="n">s</span><span class="o">?.</span><span class="n">length</span>
+</code></pre></div></div>
+
+<p><strong>Frage: Welchen Typ leitet Kotlin nun für die Variable <code class="language-plaintext highlighter-rouge">length</code> aus dem Code ab?</strong></p>
+
+<p>Die korrekte Antwort lautet: <code class="language-plaintext highlighter-rouge">Int?</code> - also ein <code class="language-plaintext highlighter-rouge">nullable Integer</code>.</p>
+
+<p>Doch können wir auch hier den <code class="language-plaintext highlighter-rouge">nullable Int</code> umgehen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">s</span><span class="p">:</span> <span class="nc">String</span><span class="p">?</span>
+<span class="c1">// Without safe-access-expression</span>
+<span class="kd">val</span> <span class="py">length</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">s</span><span class="p">.</span><span class="n">length</span> <span class="k">else</span> <span class="mi">0</span>
+<span class="c1">// with safe-access-expression</span>
+<span class="kd">val</span> <span class="py">length</span> <span class="p">=</span> <span class="n">s</span><span class="o">?.</span><span class="n">length</span> <span class="o">?:</span> <span class="mi">0</span>
+</code></pre></div></div>
+
+<p>Nun ist die Variable <code class="language-plaintext highlighter-rouge">length</code> vom Typ <code class="language-plaintext highlighter-rouge">not-nullable Int</code>, da <code class="language-plaintext highlighter-rouge">0</code> gespeichert wird, sollte der Aufruf von <code class="language-plaintext highlighter-rouge">s.length</code> mit einem <code class="language-plaintext highlighter-rouge">null</code> beendet werden.</p>
+
+<p><img src="/images/400_Nullable_Types-686d6655.webp" alt="Standardwert bei nullable Typen" /></p>
+
+<p><strong>Code zur Vertiefung:</strong></p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+<span class="kd">val</span> <span class="py">b</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="kd">val</span> <span class="py">c</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">2</span>
+
+<span class="kd">val</span> <span class="py">s1</span> <span class="p">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">?:</span> <span class="mi">0</span><span class="p">)</span> <span class="p">+</span> <span class="n">c</span>
+<span class="kd">val</span> <span class="py">s2</span> <span class="p">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">?:</span> <span class="mi">0</span><span class="p">)</span> <span class="p">+</span> <span class="n">c</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"$s1$s2"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Was gibt obiger Quelltext aus?</p>
+
+<blockquote>
+  <p>23</p>
+</blockquote>
+
+<h2 id="erzwingen-von-null-pointer-exceptions">Erzwingen von <code class="language-plaintext highlighter-rouge">Null-Pointer-Exceptions</code></h2>
+<p>In Kotlin können wir <code class="language-plaintext highlighter-rouge">Null-Pointer-Exceptions</code> auch explizit erzwingen: <code class="language-plaintext highlighter-rouge">foo!!</code>. Durch diesen Aufruf wird entweder die Variable zurückgegeben oder eine <code class="language-plaintext highlighter-rouge">Null-Pointer-Exception</code> geworfen.</p>
+
+<p><img src="/images/400_Nullable_Types-8de34b72.webp" alt="Explizit Nullpointer-Exception werfen in Kotlin" /></p>
+
+<p>Diese Variante ist auch interessent, wenn mehrere Methodenaufrufe aneinander gekettet wurden:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">person</span><span class="p">.</span><span class="n">company</span><span class="o">!!</span><span class="p">.</span><span class="n">address</span><span class="o">!!</span><span class="p">.</span><span class="n">country</span>
+</code></pre></div></div>
+
+<p>In diesem Beispiel könnten wir nicht erkennen, an welcher Stelle die Null-Pointer-Exception aufgetreten ist. Daher bietet sich für diesen Fall ein <em>klassisches</em> Exceptionhandling an.</p>
+
+<p><strong>Verständnisfragen: Welche dieser Anweisungen liefert einen Compile-Fehler?:</strong></p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">isFoo1</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nc">Name</span><span class="p">)</span> <span class="p">=</span> <span class="n">n</span><span class="p">.</span><span class="n">value</span> <span class="p">==</span> <span class="s">"foo"</span>
+<span class="k">fun</span> <span class="nf">isFoo2</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nc">Name</span><span class="p">?)</span> <span class="p">=</span> <span class="n">n</span><span class="p">.</span><span class="n">value</span> <span class="p">==</span> <span class="s">"foo"</span>
+<span class="k">fun</span> <span class="nf">isFoo3</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nc">Name</span><span class="p">?)</span> <span class="p">=</span> <span class="n">n</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">n</span><span class="p">.</span><span class="n">value</span> <span class="p">==</span> <span class="s">"foo"</span>
+<span class="k">fun</span> <span class="nf">isFoo4</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nc">Name</span><span class="p">?)</span> <span class="p">=</span> <span class="n">n</span><span class="o">?.</span><span class="n">value</span> <span class="p">==</span> <span class="s">"foo"</span>
+
+<span class="k">fun</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nc">Array</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">&gt;)</span> <span class="p">{</span>
+    <span class="nf">isFoo1</span><span class="p">(</span><span class="k">null</span><span class="p">)</span>
+    <span class="nf">isFoo2</span><span class="p">(</span><span class="k">null</span><span class="p">)</span>
+    <span class="nf">isFoo3</span><span class="p">(</span><span class="k">null</span><span class="p">)</span>
+    <span class="nf">isFoo4</span><span class="p">(</span><span class="k">null</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Antwort:</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">isFoo1(null)</code>: Dieser Aufruf funktioniert nicht, da wir nicht <code class="language-plaintext highlighter-rouge">null</code> mitübergeben können, wenn ein <code class="language-plaintext highlighter-rouge">not-nullable-type</code> erwartet wird.</li>
+  <li><code class="language-plaintext highlighter-rouge">isFoo2(null)</code>: Dieser Aufruf compiliert ebenfalls nicht. Denn die Funktion akzeptiert zwar <code class="language-plaintext highlighter-rouge">nullable-types</code>, prüft intern jedoch nicht auf <code class="language-plaintext highlighter-rouge">null</code>. Dies erlaubt der Kotlin-Compiler nicht. Akzeptiert eine Funktion auch <code class="language-plaintext highlighter-rouge">null</code>-Werte, so muss sie diese intern abfangen.</li>
+  <li><code class="language-plaintext highlighter-rouge">isFoo3(null)</code>: Diese Funktion arbeitet korrekt mit <code class="language-plaintext highlighter-rouge">nullable types</code>. Es wird auf <code class="language-plaintext highlighter-rouge">null</code> geprüft.</li>
+  <li><code class="language-plaintext highlighter-rouge">isFoo4(null)</code>: Diese Funktion kompiliert ebenfalls korrekt, da sie inhaltlich gleich wie die Funktion 3 implementiert ist.</li>
+</ul>
+
+<p><strong>Wie lautet die Ausgabe dieser Funktion?</strong></p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?</span> <span class="p">=</span> <span class="mi">1</span>
+<span class="kd">val</span> <span class="py">y</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="kd">val</span> <span class="py">sum</span> <span class="p">=</span> <span class="n">x</span> <span class="o">?:</span> <span class="mi">0</span> <span class="p">+</span> <span class="n">y</span>
+<span class="nf">println</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>Ausgabe:</strong></p>
+
+<blockquote>
+  <p>1</p>
+</blockquote>
+
+<p>Warum? Der <code class="language-plaintext highlighter-rouge">?</code> (<em>“Elvis-Operator”</em>) hat einen höheren Rang als der <code class="language-plaintext highlighter-rouge">+</code>-Operator (Daher wird dieser vor dem <code class="language-plaintext highlighter-rouge">+</code>-Operator ausgewertet.) Möchten wir in diesem Fall ein anderes Verhalten, so müssen wir entsprechend Klammern setzen: <code class="language-plaintext highlighter-rouge">val sum = (x ?: 0) + y</code>.</p>
+
+<h2 id="umsetzung-von-nullable-types">Umsetzung von Nullable Types</h2>
+<p>Intern sind die <code class="language-plaintext highlighter-rouge">nullable</code>-Types mithilfe von Annotations implementiert: <code class="language-plaintext highlighter-rouge">@Nullable</code>, <code class="language-plaintext highlighter-rouge">@NotNull</code>. So kann der Compiler einfach die entsprechenden Annotationen zu den Typen hinzufügen, ohne einen Performance-Overhead dadurch zu produzieren.</p>
+
+<p>Zusätzlich gibt es den Typ <code class="language-plaintext highlighter-rouge">Optional</code>:</p>
+
+<p><img src="/images/400_Nullable_Types-38991682.webp" alt="Kotlin Typ Optional" /></p>
+
+<p>Dieser Typ speichert den Wert oder das Fehlen eines Wertes. Sogesehen lösen Nullable-Types und Optionals das gleiche Problem. Unterschiede ergeben sich jedoch hinsichtlich der Performance.</p>
+
+<p>Der Optional-Typ stellt einen Wrapper für den zugrunde liegenden Typ dar. Das bedeutet, dass für jede Variable ein zusätzliches Objekt erstellt werden muss. Nullable-Typen hingegen werden rein durch die Annotation implementiert.</p>
+
+<p>Da der Kotlin Code nach Java Byte-Code transpiliert wird, setzt der Compiler bei Nullable Typen einfach die entsprechenden Annotationen bei den Java-Typen:</p>
+
+<p><img src="/images/400_Nullable_Types-929efe7d.webp" alt="Kotlin Not-nullable Typen in Java" /></p>
+
+<p>Aus diesem Grund wird der not-nullable Typ nur zur Compile-Zeit geprüft. Zur Laufzeit entspricht er einfach den zugrundeliegenden Java-Typen.</p>
+
+<h3 id="nullability-und-generische-datentypen">Nullability und generische Datentypen</h3>
+
+<p>Wie sieht die Implementierung nun bei generischen Datentypen aus? Betrachten wir den Unterschied zwischen einer Liste von nullable-Ints und einer nullable-Liste von Ints:</p>
+
+<p><img src="/images/400_Nullable_Types-d1cdc046.webp" alt="Nullability und generische Datentypen" /></p>
+
+<p>Im ersten Fall kann jedes Element der Liste <code class="language-plaintext highlighter-rouge">null</code> oder <code class="language-plaintext highlighter-rouge">not-null</code> sein. Im zweiten Fall kann nur die gesamte Liste <code class="language-plaintext highlighter-rouge">null</code> oder <code class="language-plaintext highlighter-rouge">not-null</code> sein (Sollten zusätzlich auch noch alle Elemente <code class="language-plaintext highlighter-rouge">nullable</code> sein, so müssen an beiden Stellen <code class="language-plaintext highlighter-rouge">?</code> eingefügt werden.)</p>
+
+<p><strong>Beispiel: Wo müssten in diesem Fall <code class="language-plaintext highlighter-rouge">?</code> eingefügt werden, damit der Code korrekt compiliert werden kann?</strong></p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">foo</span><span class="p">(</span><span class="n">list1</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="err">?</span><span class="p">&gt;,</span> <span class="n">list2</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">&gt;?)</span> <span class="p">{</span>
+<span class="err">#</span><span class="mi">1</span>  <span class="n">list1</span><span class="p">.</span><span class="n">size</span>
+<span class="err">#</span><span class="mi">2</span>  <span class="n">list2</span><span class="p">.</span><span class="n">size</span>
+
+<span class="err">#</span><span class="mi">3</span>  <span class="kd">val</span> <span class="py">i</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span>
+<span class="err">#</span><span class="mi">4</span>    <span class="n">list1</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="err">#</span><span class="mi">5</span>  <span class="kd">val</span> <span class="py">j</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span>
+<span class="err">#</span><span class="mi">6</span>    <span class="n">list2</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Die erste Liste besteht aus <code class="language-plaintext highlighter-rouge">nullable</code>-Elementen. Die Liste selbst ist aber <code class="language-plaintext highlighter-rouge">not-nullable</code>. Daher können wir sie ohne weitere Vorsichtsmaßnahmen referenzieren.</p>
+
+<p>Allerdings wirft der Compiler für Zeile <code class="language-plaintext highlighter-rouge">#4</code> einen Fehler. Denn der Typ des Elements aus der Liste ist <code class="language-plaintext highlighter-rouge">nullable</code>, die Variable <code class="language-plaintext highlighter-rouge">i</code>, der wir den Wert zuweisen möchten, jedoch nicht. Wir müssen daher Zeile <code class="language-plaintext highlighter-rouge">#3</code> folgendermaßen ändern:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span><span class="mi">3</span>  <span class="kd">val</span> <span class="py">i</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?</span> <span class="p">=</span>
+</code></pre></div></div>
+
+<p>Betrachten wir nun die zweite Liste! Hier ist die gesamte Liste <code class="language-plaintext highlighter-rouge">nullable</code>. Daher müssen wir mehrere <code class="language-plaintext highlighter-rouge">?</code> einfügen, damit der Code compiliert werden kann:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span><span class="mi">2</span>  <span class="n">list2</span><span class="o">?.</span><span class="n">size</span>
+
+<span class="err">#</span><span class="mi">5</span>  <span class="kd">val</span> <span class="py">j</span><span class="p">:</span> <span class="nc">Int</span><span class="p">?</span> <span class="p">=</span>
+<span class="err">#</span><span class="mi">6</span>    <span class="n">list2</span><span class="o">?.</span><span class="k">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="safe-casts">Safe-Casts</h2>
+<p>Aus Java sind wir es gewohnt, dass wir ein Objekt auf den erwarteten Typ prüfen, bevor wir die entsprechenden Objektmethoden aufrufen:</p>
+
+<ol>
+  <li>Typ-Prüfung durchführen</li>
+  <li>Type-Cast durchführen</li>
+  <li>entsprechende Objektmethode aufrufen</li>
+</ol>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">any</span> <span class="k">is</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">s</span> <span class="p">=</span> <span class="n">any</span> <span class="k">as</span> <span class="nc">String</span>
+    <span class="n">s</span><span class="p">.</span><span class="nf">toUpperCase</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>In diesem Schema entspricht <code class="language-plaintext highlighter-rouge">is</code> dem <code class="language-plaintext highlighter-rouge">instanceof</code>-Operator und <code class="language-plaintext highlighter-rouge">as</code> dem entsprechenden Typecast.</p>
+
+<p>Mithilfe von Kotlin kann dieses Prozedere jedoch verkürzt werden. Wir können nach der Typprüfung die Objektmethoden direkt aufrufen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">any</span> <span class="k">is</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">any</span><span class="p">.</span><span class="nf">toUpperCase</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Dieses Verhalten wird in Kotlin als <em>smart-cast</em> bezeichnet. Jedoch können wir den Sourcecode noch weiter vereinfachen, indem wir statt des <em>smart-cast</em> einen <em>safe-cast</em> verwerden:</p>
+
+<pre><code class="language-Kotlin">(any as? String)?.toUpperCase()
+</code></pre>
+
+<p>So erhalten wir entweder das Ergebnis des <em>smart-cast</em> oder das Ergebnis <em>null</em>.</p>
+
+<h2 id="relevanz-von-nullability">Relevanz von Nullability</h2>
+<p>Das Thema der <code class="language-plaintext highlighter-rouge">Null-Pointer-Exceptions</code> verfolgte Programmierer seit Anbeginn der Programmierung von Softwaresystemen. Aus diesem Grund wurde in Kotlin die Kontrolle über Nullability direkt in das Typ-Sytem von Kotlin integriert und nicht über eine eigene Bibliothek zur Verfügung gestellt.</p>
+
+  </div><a class="u-url" href="/2020/03/18/Nullable-Types.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+      <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">
+              <img alt="Die KI Revolution. Warum Unternehmen ohne KI keine Zukunft haben." data-src="/images/index-84c9d1a4.webp" class="lazyload" width="180px" />
+              </a>
+          </div>
+
+          <strong>In unserem Buch <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">Die KI-Revolution. Warum Unternehmen ohne KI keine Zukunft haben.</a> </strong> erläutern wir wie man künstliche Intelligenz aus wirtschaftlicher Perspektive im Unternehmen umsetzen kann.
+
+          Projekte aus verschiedenen Anwendungsgebiten der KI stellen wir auch auf unseren linkedin-Showcase Seiten aus:
+          <br/><br/>
+          <p><strong>Bildverarbeitung:</strong> <a alt="ImageSegmentation" href="https://www.linkedin.com/showcase/image-segmentation/">ImageSegmentation</a></p>
+              <p><strong>Bildklassifizierung:</strong> <a href="https://detect-eye-diseases.herokuapp.com/">Erkennen von Augenerkrankungen mittels KI</a></p>
+              <p><strong>Deep Learning fürs Marketing:</strong> der <a alt="aitracer" href="https://www.linkedin.com/showcase/ai.tracer/"> aitracer</a></p>
+
+      </div>
+
+    <h2 class="footer-heading">Der Blog zu künstlicher Intelligenz von <a href="we-make.ai">we-make.ai</a></h2>
+    <h3>Künstliche Intelligenz, Machine Learning, Deep Learning</h3>
+    <a href="https://www.we-make.ai"><img data-src="/images/we-make-ai-logo.webp" class="lazyload" alt="Logo von we-make.ai"/></a>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kotlin 4 Java Developers</li><li><a class="u-email" href="mailto:info@we-make.ai">info@we-make.ai</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.linkedin.com/in/we-make-ai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">linkedin</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kotlin, Java, Programmierung</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" 
+data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#237afc"
+    },
+    "button": {
+      "background": "#fff",
+      "text": "#237afc"
+    }
+  },
+  "type": "opt-in"
+});
+</script></body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale:alternate" content="de_AT" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+  <link rel="canonical" href="kotlin4java.online/2020/03/14/Object-Expression-Object-Declaration.html"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Object Declaration vs. Object Expression | Kotlin 4 Java Developers</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Object Declaration vs. Object Expression" />
+<meta name="author" content="Bernhard J. Mayr" />
+<meta property="og:locale" content="de" />
+<meta name="description" content="In Kotlin stellt object ein Singleton dar. Ein Singleton ist per Definition eine Klasse, die nur eine Instanz aufweist. Wir zeigen die Unterschiede zwischen Declaration und Expression auf." />
+<meta property="og:description" content="In Kotlin stellt object ein Singleton dar. Ein Singleton ist per Definition eine Klasse, die nur eine Instanz aufweist. Wir zeigen die Unterschiede zwischen Declaration und Expression auf." />
+<link rel="canonical" href="kotlin4java.online/2020/03/14/Object-Expression-Object-Declaration.html" />
+<meta property="og:url" content="kotlin4java.online/2020/03/14/Object-Expression-Object-Declaration.html" />
+<meta property="og:site_name" content="Kotlin 4 Java Developers" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-14T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Object Declaration vs. Object Expression" />
+<script type="application/ld+json">
+{"description":"In Kotlin stellt object ein Singleton dar. Ein Singleton ist per Definition eine Klasse, die nur eine Instanz aufweist. Wir zeigen die Unterschiede zwischen Declaration und Expression auf.","mainEntityOfPage":{"@type":"WebPage","@id":"kotlin4java.online/2020/03/14/Object-Expression-Object-Declaration.html"},"url":"kotlin4java.online/2020/03/14/Object-Expression-Object-Declaration.html","headline":"Object Declaration vs. Object Expression","dateModified":"2020-03-14T00:00:00+01:00","datePublished":"2020-03-14T00:00:00+01:00","@type":"BlogPosting","author":{"@type":"Person","name":"Bernhard J. Mayr"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="kotlin4java.online/feed.xml" title="Kotlin 4 Java Developers" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-152392799-4', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script src="/assets/lazysizes.min.js" async></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+  
+
+  
+
+  <script>
+  function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+  }
+  window.onload = wrap_img;
+  </script>
+
+</head><body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kotlin 4 Java Developers</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">Über uns</a><a class="page-link" href="/datenschutzerklaerung.html">Datenschutzerklärung</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://amzn.to/3curXKy" target="_blank" alt="kotlin-4-java-developers">
+                <img src="/images/kotlin-4-java-developers-buch.webp" alt="Logo Buch Kotlin4Java Developers" width="180px" />
+              </a>
+          </div>
+
+          Alle Informationen zur <h1>Programmierung mit Kotlin</h1> haben wir kompakt in unserem Buch <a href="https://amzn.to/3curXKy" alt="Kotlin4JavaDevelopers - unser Buch auf Amazon" target="_blank"><b>Kotlin 4 Java Developers</b></a> zusammengefasst.
+          <br/><br/>
+ </div>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Object Declaration vs. Object Expression</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-03-14T00:00:00+01:00" itemprop="datePublished">
+        2020-03-14
+      </time>• 
+            
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name"><a href="https://www.linkedin.com/in/bemayr/">Bernhard J. Mayr</a></span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>In Kotlin stellt <code class="language-plaintext highlighter-rouge">object</code> ein Singleton dar. Ein Singleton ist per Definition eine Klasse, die nur eine Instanz aufweist.</p>
+
+<p>Um ein Singleton in Java zu implementieren, kann man einen privaten Konstruktor verwenden und ein Feld, das das Singleton beinhaltet definieren.</p>
+
+<p><img src="/images/440_Object_Expression_Object_Declaration-2c1fa55d.webp" alt="" /></p>
+
+<p>In Kotlin wird genau dieser Code generiert, um das Singleton-Pattern zu realisieren. Der Zugriff auf Members des Singletons erfolgt in Java über die in der Klasse gespeicherte Instanz, während wir in Kotlin direkt auf das Property zugreifen können.</p>
+
+<p><img src="/images/440_Object_Expression_Object_Declaration-81a601d5.webp" alt="" /></p>
+
+<h2 id="object-expression">Object Expression</h2>
+<p>Object Expressions ersetzen die annonymen Klassen in Java.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">window</span><span class="p">.</span><span class="nf">addMouseListener</span><span class="p">(</span>
+    <span class="kd">object</span> <span class="err">: </span><span class="nc">MouseAdapter</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">mouseClicked</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">MouseEvent</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">....</span>
+        <span class="p">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">mouseEntered</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="nc">MouseEvent</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">....</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<p>Wann immer das Interface, das wir benötigen nur eine Methode aufweist, können wir anstatt der Object Expressions auch einfach Lambda-Ausdrücke verwenden.</p>
+
+<h2 id="companion-objects">Companion Objects</h2>
+<p>In Kotlin können wir Objekte innerhalb von Objekten deklarieren. Dies wird als <code class="language-plaintext highlighter-rouge">companion object</code> bezeichnet:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span> <span class="p">{</span>
+    <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span>
+        <span class="k">fun</span> <span class="nf">foo</span><span class="p">()</span> <span class="p">=</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nc">Array</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">&gt;)</span> <span class="p">{</span>
+    <span class="nc">A</span><span class="p">.</span><span class="nf">foo</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Die Methoden des inneren  Objekts können dann über den Klassennamen aufgerufen werden. Da es in Kotlin keine statischen Methoden wie in Java gibt, können wir ähnliches Verhalten durch <code class="language-plaintext highlighter-rouge">companion</code> Objects realisieren.</p>
+
+<p>Die <code class="language-plaintext highlighter-rouge">companion</code> Objects in Kotlin können Interfaces implementieren, was statische Klassen in Java nicht können.</p>
+
+<p>Mit <code class="language-plaintext highlighter-rouge">companion</code> Objects können wir auch die Klassenerweiterungen aus Kotlin nutzen. Um bei der Erweiterung auf das <code class="language-plaintext highlighter-rouge">companion</code> Object zugreifen zu können, verwenden wir das Schlüsselwort <code class="language-plaintext highlighter-rouge">Companion</code>. Nach der Deklaration können wir die Erweiterungen wie eine Klassenerweiterung verwenden.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">FirstName</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">companion</span> <span class="k">object</span> <span class="p">{</span> <span class="o">....</span> <span class="p">}</span>    
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nc">Person</span><span class="p">.</span><span class="nc">Companion</span><span class="p">.</span><span class="nf">fromJSON</span><span class="p">(</span><span class="n">json</span><span class="p">:</span> <span class="nc">String</span><span class="p">):</span> <span class="nc">Person</span> <span class="p">{</span>
+    <span class="o">..</span><span class="p">.</span>
+<span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">p</span> <span class="p">=</span> <span class="nc">Person</span><span class="p">.</span><span class="nf">fromJSON</span><span class="p">(</span><span class="n">json</span><span class="p">)</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/2020/03/14/Object-Expression-Object-Declaration.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+      <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">
+              <img alt="Die KI Revolution. Warum Unternehmen ohne KI keine Zukunft haben." data-src="/images/index-84c9d1a4.webp" class="lazyload" width="180px" />
+              </a>
+          </div>
+
+          <strong>In unserem Buch <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">Die KI-Revolution. Warum Unternehmen ohne KI keine Zukunft haben.</a> </strong> erläutern wir wie man künstliche Intelligenz aus wirtschaftlicher Perspektive im Unternehmen umsetzen kann.
+
+          Projekte aus verschiedenen Anwendungsgebiten der KI stellen wir auch auf unseren linkedin-Showcase Seiten aus:
+          <br/><br/>
+          <p><strong>Bildverarbeitung:</strong> <a alt="ImageSegmentation" href="https://www.linkedin.com/showcase/image-segmentation/">ImageSegmentation</a></p>
+              <p><strong>Bildklassifizierung:</strong> <a href="https://detect-eye-diseases.herokuapp.com/">Erkennen von Augenerkrankungen mittels KI</a></p>
+              <p><strong>Deep Learning fürs Marketing:</strong> der <a alt="aitracer" href="https://www.linkedin.com/showcase/ai.tracer/"> aitracer</a></p>
+
+      </div>
+
+    <h2 class="footer-heading">Der Blog zu künstlicher Intelligenz von <a href="we-make.ai">we-make.ai</a></h2>
+    <h3>Künstliche Intelligenz, Machine Learning, Deep Learning</h3>
+    <a href="https://www.we-make.ai"><img data-src="/images/we-make-ai-logo.webp" class="lazyload" alt="Logo von we-make.ai"/></a>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kotlin 4 Java Developers</li><li><a class="u-email" href="mailto:info@we-make.ai">info@we-make.ai</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.linkedin.com/in/we-make-ai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">linkedin</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kotlin, Java, Programmierung</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" 
+data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#237afc"
+    },
+    "button": {
+      "background": "#fff",
+      "text": "#237afc"
+    }
+  },
+  "type": "opt-in"
+});
+</script></body>
+
+</html>

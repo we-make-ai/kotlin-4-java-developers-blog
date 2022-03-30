@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale:alternate" content="de_AT" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+  <link rel="canonical" href="kotlin4java.online/2020/03/16/Properties-in-Kotlin.html"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Properties in Kotlin | Kotlin 4 Java Developers</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Properties in Kotlin" />
+<meta name="author" content="Bernhard J. Mayr" />
+<meta property="og:locale" content="de" />
+<meta name="description" content="Wir zeigen, was properties (bzw. Eigenschaften) von Klassen in Kotlin sind und wie wir diese in der Programmierung einsetzen können." />
+<meta property="og:description" content="Wir zeigen, was properties (bzw. Eigenschaften) von Klassen in Kotlin sind und wie wir diese in der Programmierung einsetzen können." />
+<link rel="canonical" href="kotlin4java.online/2020/03/16/Properties-in-Kotlin.html" />
+<meta property="og:url" content="kotlin4java.online/2020/03/16/Properties-in-Kotlin.html" />
+<meta property="og:site_name" content="Kotlin 4 Java Developers" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-16T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Properties in Kotlin" />
+<script type="application/ld+json">
+{"description":"Wir zeigen, was properties (bzw. Eigenschaften) von Klassen in Kotlin sind und wie wir diese in der Programmierung einsetzen können.","mainEntityOfPage":{"@type":"WebPage","@id":"kotlin4java.online/2020/03/16/Properties-in-Kotlin.html"},"url":"kotlin4java.online/2020/03/16/Properties-in-Kotlin.html","headline":"Properties in Kotlin","dateModified":"2020-03-16T00:00:00+01:00","datePublished":"2020-03-16T00:00:00+01:00","@type":"BlogPosting","author":{"@type":"Person","name":"Bernhard J. Mayr"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="kotlin4java.online/feed.xml" title="Kotlin 4 Java Developers" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-152392799-4', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script src="/assets/lazysizes.min.js" async></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+  
+
+  
+
+  <script>
+  function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+  }
+  window.onload = wrap_img;
+  </script>
+
+</head><body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kotlin 4 Java Developers</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">Über uns</a><a class="page-link" href="/datenschutzerklaerung.html">Datenschutzerklärung</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://amzn.to/3curXKy" target="_blank" alt="kotlin-4-java-developers">
+                <img src="/images/kotlin-4-java-developers-buch.webp" alt="Logo Buch Kotlin4Java Developers" width="180px" />
+              </a>
+          </div>
+
+          Alle Informationen zur <h1>Programmierung mit Kotlin</h1> haben wir kompakt in unserem Buch <a href="https://amzn.to/3curXKy" alt="Kotlin4JavaDevelopers - unser Buch auf Amazon" target="_blank"><b>Kotlin 4 Java Developers</b></a> zusammengefasst.
+          <br/><br/>
+ </div>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Properties in Kotlin</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-03-16T00:00:00+01:00" itemprop="datePublished">
+        2020-03-16
+      </time>• 
+            
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name"><a href="https://www.linkedin.com/in/bemayr/">Bernhard J. Mayr</a></span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>In Kotlin werden Properties, die in Java z.B. über das Java-Beans Konzept realisiert werden, als eigenes Sprach-Features realisiert.</p>
+
+<p>Betrachten wir zunächst eine Java-Klasse:</p>
+
+<pre><code class="language-Java">public class JavaClass {
+    private int foo = 0;
+    public int getFoo() {
+        return foo;
+    }
+    public void setFoo(int foo) {
+        this.foo = foo;
+    }
+}
+</code></pre>
+
+<p>In Java gibt es keine direkten Properties in Klassen. Definieren wir jedoch zu einem Feld die entsprechenden <code class="language-plaintext highlighter-rouge">get</code> und <code class="language-plaintext highlighter-rouge">set</code> Methoden, so können wir dieses Feld als Property betrachten.</p>
+
+<p>In Kotlin können wir Properties direkt innerhalb einer Klasse anlegen:</p>
+
+<pre><code class="language-Kotlin">class KotlinClass {
+    var foo = 0
+}
+</code></pre>
+
+<blockquote>
+  <p>Aufgrund der Kompatitibilität zwischen Kotlin und Java werden die Properties in Kotlin intern jedoch genauso wie in Java mithilfe von Feldern und entsprechenden <code class="language-plaintext highlighter-rouge">get</code> bzw. <code class="language-plaintext highlighter-rouge">set</code>-Methoden umgesetzt.
+property = field + accessor(s)
+val = field + getter
+var = filed + getter + setter</p>
+</blockquote>
+
+<p>Allerdings verwenden wir in Kotlin die Properties direkt und nicht mittels getter-/setter-Methoden.</p>
+
+<pre><code class="language-Kotlin">class Contact (
+    val name: String,
+    var address: String
+)
+
+println(contact.address)
+contact.adress = "...."
+</code></pre>
+
+<blockquote>
+  <p>Intern werden jedoch die entsprechenden getter-/setter-Methoden aufgerufen.</p>
+</blockquote>
+
+<p>Verwenden wir diese Kotlin Klasse jedoch in Java, so müssen wir mittels der entsprechenden Methoden auf die Properties zugreifen.</p>
+
+<p>Auf diese Weise können wir eine einfache und schlanke Syntax in Kotlin verwenden, während der generierte Bytecode voll kompatibel zu Java bleibt.</p>
+
+<h2 id="zugriff-auf-felder-in-kotlin">Zugriff auf Felder in Kotlin</h2>
+<p>In Kotlin arbeiten wir nicht mit den Feldern einer Klasse, sondern direkt mit den Properties. Wir können jedoch innerhalb einer Accessor-Methode auch auf die Felder zugreifen.</p>
+
+<pre><code class="language-Kotlin">class StateLogger {
+    var state = false
+        set(value) {
+            println("state has changed:  + $field --&gt; $value")
+            field = value
+        }
+}
+
+StateLogger().state = true
+</code></pre>
+<blockquote>
+  <p>Output: state has changed: false -&gt; true</p>
+</blockquote>
+
+<p>Innerhalb der getter- und setter-Methode können wir mithilfe des Schlüsselworts <code class="language-plaintext highlighter-rouge">field</code> auf die entsprechenden Felder zugreifen.</p>
+
+<p>Wenn wir zwar Accessor-Methoden implementieren, aber nicht auf das Feld zugreifen, wird auch kein <em>backup-property</em> vom Compiler erstellt.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">enum</span> <span class="kd">class</span> <span class="nc">State</span> <span class="p">{</span> <span class="nc">ON</span><span class="p">,</span> <span class="nc">OFF</span><span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">StateLogger</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="kd">var</span> <span class="py">boolState</span> <span class="p">=</span> <span class="k">false</span>
+
+    <span class="kd">var</span> <span class="py">state</span><span class="p">:</span> <span class="nc">State</span>
+        <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">boolState</span><span class="p">)</span> <span class="nc">ON</span> <span class="k">else</span> <span class="nc">OFF</span>
+        <span class="k">set</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nc">State</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">boolState</span> <span class="p">=</span> <span class="n">value</span> <span class="p">==</span> <span class="nc">ON</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In obigem Codebeispiel greifen wir innerhalb der Accessor-Methode nicht auf das interne Feld zu. Für das Property <code class="language-plaintext highlighter-rouge">state</code> erstellt der Compiler kein eigenes Feld, da wir nur an das Property <code class="language-plaintext highlighter-rouge">boolState</code> delegieren.</p>
+
+<h2 id="properties-ohne-felder">Properties ohne Felder</h2>
+<p>In Kotlin können wir die Felder weglassen, sofern wir keine Zwischenspeicherung der konkreten Werte benötigen. In diesem Fall definieren wir einfach die erforderliche(n) Methode(n).</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Rectangle</span><span class="p">(</span><span class="kd">val</span> <span class="py">height</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="kd">val</span> <span class="py">width</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">isSquare</span><span class="p">:</span> <span class="nc">Boolean</span>
+        <span class="k">get</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">height</span> <span class="p">=</span> <span class="n">width</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="sichtbarkeit-von-accessor-methoden">Sichtbarkeit von Accessor-Methoden</h2>
+<p>Wir können die Sichtbarkeit von Accessor-Methoden auf Properties in Kotlin einschränken.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">LengthCounter</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="py">counter</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">=</span> <span class="mi">0</span>
+        <span class="k">private</span> <span class="k">set</span>
+
+    <span class="k">fun</span> <span class="nf">addWord</span><span class="p">(</span><span class="n">word</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">counter</span> <span class="p">+=</span> <span class="n">word</span><span class="p">.</span><span class="n">length</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In diesem Beispiel definieren wir <code class="language-plaintext highlighter-rouge">set</code> als <code class="language-plaintext highlighter-rouge">private</code>. Dadurch können wir zwar innerhalb der Klasse schreibend auf das Propery zugreifen - jedoch nicht von außen.</p>
+
+<h2 id="properties-in-interfaces">Properties in Interfaces</h2>
+<p>Auch in Interfaces können wir Properties definieren. Warum auch nicht - intern wird es einfach als getter-Methode implementiert.</p>
+
+<p>In den Klassen, die das Interface implementieren, müssen wir dann das Property entsprechend überschreiben.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">User</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">nickname</span><span class="p">:</span> <span class="nc">String</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">FacebookUser</span><span class="p">(</span><span class="kd">val</span> <span class="py">accountId</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">:</span> <span class="nc">User</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">nickname</span> <span class="p">=</span> <span class="nf">getFacebookName</span><span class="p">(</span><span class="n">accountId</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">SubscribingUser</span><span class="p">(</span><span class="kd">val</span> <span class="py">email</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">:</span> <span class="nc">User</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">nickname</span><span class="p">:</span> <span class="nc">String</span>
+        <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="n">email</span><span class="p">.</span><span class="nf">substringBefore</span><span class="p">(</span><span class="sc">'@'</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Sämtlliche Properties aus Interfaces können jedoch nicht in <em>smart-casts</em> verwendet werden. Die Properties in Interfaces sind nicht <code class="language-plaintext highlighter-rouge">final</code>, sondern können in den implementierenden Klassen beschrieben werden.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">Session</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">user</span><span class="p">:</span> <span class="nc">User</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">analyzeUserSession</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="nc">Session</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">session</span><span class="p">.</span><span class="n">user</span> <span class="k">is</span> <span class="nc">FacebookUser</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="n">session</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">accountId</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Hier liefert der Compiler einen Fehler: <code class="language-plaintext highlighter-rouge">session.user.accountId</code>, da kein <em>smart-cast</em> verwendet werden kann. Das Property <code class="language-plaintext highlighter-rouge">session.user</code> hat eine offene Zugriffsmethode. Diese könnte bei jedem Zugriff einen anderen Wert zurückliefern, weshalb ein <em>smart-cast</em> in diesem Fall nicht sicher ist.</p>
+
+<p>Wir können dieses Code-Snippet jedoch so umbauen, dass wir mithilfe einer lokalen Variable den <em>smart-cast</em> aus Kotlin nutzen können:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">Session</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">user</span><span class="p">:</span> <span class="nc">User</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">analyzeUserSession</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="nc">Session</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">user</span> <span class="p">=</span> <span class="n">session</span><span class="p">.</span><span class="n">user</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">user</span> <span class="k">is</span> <span class="nc">FacebookUser</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">accountId</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Auch mit <code class="language-plaintext highlighter-rouge">mutable</code> properties ist kein Einsatz von smart-casts möglich, da diese in einem parllelen Thread geändert werden könnten.</p>
+</blockquote>
+
+<h2 id="extension-properties">Extension Properties</h2>
+<p>In Kotlin können wir auch <code class="language-plaintext highlighter-rouge">Extension Properties</code> erstellen. Dazu definieren wir einfach ein Property und definieren zuerst den <code class="language-plaintext highlighter-rouge">receiver</code>-Typ des Properties.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">String</span><span class="p">.</span><span class="n">lastIndex</span><span class="p">:</span> <span class="nc">Int</span>
+    <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">length</span> <span class="p">-</span> <span class="mi">1</span>
+
+<span class="kd">val</span> <span class="py">String</span><span class="p">.</span><span class="n">indices</span><span class="p">:</span> <span class="nc">IntRange</span>
+    <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="mi">0</span><span class="o">..</span><span class="n">lastIndex</span>
+</code></pre></div></div>
+
+<p>Erweiterungs-Properties sind im Grunde gleich wie Erweiterungsfunktionen. Sie unterscheiden sich nur in der anderen Syntax.</p>
+
+<h3 id="mutable-extension-properties">Mutable Extension Properties</h3>
+<p>Wir können auch <code class="language-plaintext highlighter-rouge">mutable</code>-Erweiterungs-Properties in Kotlin erstellen, welche wir im weiteren Verlauf wie ein gewöhnliches Property verwenden können.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="py">StringBuilder</span><span class="p">.</span><span class="n">lastChar</span><span class="p">:</span> <span class="nc">Char</span>
+    <span class="k">get</span><span class="p">()</span> <span class="p">=</span> <span class="k">get</span><span class="p">(</span><span class="n">length</span> <span class="p">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">set</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nc">Char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nf">setCharAt</span><span class="p">(</span><span class="n">length</span> <span class="p">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">sb</span> <span class="p">=</span> <span class="nc">StringBuilder</span><span class="p">(</span><span class="s">"Kotlin?"</span><span class="p">)</span>
+<span class="n">sb</span><span class="p">.</span><span class="n">lastChar</span> <span class="p">=</span> <span class="sc">'!'</span>
+<span class="nf">println</span><span class="p">(</span><span class="n">sb</span><span class="p">)</span>
+</code></pre></div></div>
+<blockquote>
+  <p>Output: Kotlin!</p>
+</blockquote>
+
+<h2 id="lazy-bzw-late-properties">Lazy bzw. Late Properties</h2>
+<p>Bei <em>lazy</em> Properties werden deren Werte erst beim ersten Zugriff auf das Property berechnet. Es ist daher also <em>lazy</em> in dem Sinn, dass das Property keinerlei Interaktion auslöst, solange der Wert nicht erforderlich ist. In Kotlin fügen wir einfach <code class="language-plaintext highlighter-rouge">by lazy</code> an die Definition des Property an, um ein Property mit der <em>lazy</em> Eigenschaft zu erzeugen.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">lazyValue</span><span class="p">:</span> <span class="nc">String</span> <span class="k">by</span> <span class="nf">lazy</span> <span class="p">{</span>
+    <span class="nf">println</span><span class="p">(</span><span class="s">"computed"</span><span class="p">)</span>
+    <span class="s">"Hello"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Das Schlüsselwort <code class="language-plaintext highlighter-rouge">lazy</code> ist eine Funktion, die einen Lambda-Ausdruck als Argument verlangt. Wenn wir auf dieses Property zugreifen, wird der Wert beim ersten Zugriff berechnet und gespeichert. Bei jedem späteren Zugriff erfolgt nur die Rückgabe des gespeicherten Wertes.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="nc">Array</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">&gt;)</span> <span class="p">{</span>
+    <span class="nf">println</span><span class="p">(</span><span class="n">lazyValue</span><span class="p">)</span>
+    <span class="nf">println</span><span class="p">(</span><span class="n">lazyValue</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Output:</p>
+
+<blockquote>
+  <p>computed!
+Hello
+Hello</p>
+</blockquote>
+
+<p>Eine weitere Möglichkeit stellt <strong>Late Initialization</strong> dar. Diese Variante ist besonders hilfreich bei der Initialisierung von Android Activities, dem Durchführen von Unittests oder dem Einsatz von dependency injection Frameworks.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">KotlinActivity</span><span class="p">:</span> <span class="nc">Activity</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="py">myData</span><span class="p">:</span> <span class="nc">MyData</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="nc">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+
+        <span class="n">myData</span> <span class="p">=</span> <span class="n">intent</span><span class="p">.</span><span class="nf">getParcelableExtra</span><span class="p">(</span><span class="s">"MY_DATA"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In obigem Beispiel aus Android wollen wir das Property nicht im Konstruktor, sondern in einer eigenen Methode initialisieren. Natürlich können wir das Property in diesem Fall nicht als <code class="language-plaintext highlighter-rouge">not-nullable</code> definieren, da wir keinen initialen Wert haben. Wir können als Initialwert nur <code class="language-plaintext highlighter-rouge">null</code> wählen. Dies bedeutet jedoch, dass wir bei jedem Zugriff auf das Property mit der Thematik von <code class="language-plaintext highlighter-rouge">null</code>-Werten konfrontiert sind: <code class="language-plaintext highlighter-rouge">myData?.foo</code>.</p>
+
+<p>Da wir jedoch wissen, dass dieses Property nicht mehr <code class="language-plaintext highlighter-rouge">null</code> sein kann, nachdem es ordnungsgemäß initialisiert wurde, können wir in diesem Beispiel <em>late initialization</em> verwenden:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">KotlinActivity</span><span class="p">:</span> <span class="nc">Activity</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">myData</span><span class="p">:</span> <span class="nc">MyData</span>
+    <span class="o">..</span><span class="p">.</span>
+</code></pre></div></div>
+
+<p>Nun können wir das Property als <code class="language-plaintext highlighter-rouge">not-nullable</code>-Typ verwenden: <code class="language-plaintext highlighter-rouge">myData.foo</code>.</p>
+
+<p><strong>Was passiert jedoch, wenn das Property noch nicht ordnungsgemäß initialisiert wurde?</strong></p>
+
+<p>Es wird zwar eine <code class="language-plaintext highlighter-rouge">Null-Pointer</code>-Exception geworfen, doch mit einer Erklärung, dass das Property noch nicht initialisiert wurde.</p>
+
+<p><strong>Welche Rahmenbedingungen müssen wir beim Einsatz von <em>late-Initialization</em> berücksichtigen?</strong></p>
+
+<p>Wir können Properies mit <code class="language-plaintext highlighter-rouge">lateinit</code> nicht gleichzeitig als <code class="language-plaintext highlighter-rouge">val</code> (Konstante) deklarieren, da ein solches Property im Java-Byte-Code nicht als <code class="language-plaintext highlighter-rouge">final</code> definiert werden kann. Schließlich wird es nicht im Konstruktor, sondern erst später zur Laufzeit initialisiert.</p>
+
+<p><img src="/images/420_Properties_in_Kotlin-1a49737e.webp" alt="" /></p>
+
+<p>Ein <em>late-init</em> Property kann auch keinen primitiven Datentyp beinhalten.</p>
+
+<p>Mit <em>late-init</em> Properties können wir prüfen, ob die Properties bereits initialisiert wurden, oder nicht:</p>
+
+<pre><code class="language-Kotlin">class MyClass {
+    lateinit var lateinitVar: String
+
+    fun initilizationLogic() {
+        println(this::lateinitVar.isInitialized) // false
+        lateinitVar = "value"
+        println(this::lateinitVar.isInitialized) // true
+    }
+}
+</code></pre>
+
+  </div><a class="u-url" href="/2020/03/16/Properties-in-Kotlin.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+      <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">
+              <img alt="Die KI Revolution. Warum Unternehmen ohne KI keine Zukunft haben." data-src="/images/index-84c9d1a4.webp" class="lazyload" width="180px" />
+              </a>
+          </div>
+
+          <strong>In unserem Buch <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">Die KI-Revolution. Warum Unternehmen ohne KI keine Zukunft haben.</a> </strong> erläutern wir wie man künstliche Intelligenz aus wirtschaftlicher Perspektive im Unternehmen umsetzen kann.
+
+          Projekte aus verschiedenen Anwendungsgebiten der KI stellen wir auch auf unseren linkedin-Showcase Seiten aus:
+          <br/><br/>
+          <p><strong>Bildverarbeitung:</strong> <a alt="ImageSegmentation" href="https://www.linkedin.com/showcase/image-segmentation/">ImageSegmentation</a></p>
+              <p><strong>Bildklassifizierung:</strong> <a href="https://detect-eye-diseases.herokuapp.com/">Erkennen von Augenerkrankungen mittels KI</a></p>
+              <p><strong>Deep Learning fürs Marketing:</strong> der <a alt="aitracer" href="https://www.linkedin.com/showcase/ai.tracer/"> aitracer</a></p>
+
+      </div>
+
+    <h2 class="footer-heading">Der Blog zu künstlicher Intelligenz von <a href="we-make.ai">we-make.ai</a></h2>
+    <h3>Künstliche Intelligenz, Machine Learning, Deep Learning</h3>
+    <a href="https://www.we-make.ai"><img data-src="/images/we-make-ai-logo.webp" class="lazyload" alt="Logo von we-make.ai"/></a>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kotlin 4 Java Developers</li><li><a class="u-email" href="mailto:info@we-make.ai">info@we-make.ai</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.linkedin.com/in/we-make-ai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">linkedin</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kotlin, Java, Programmierung</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" 
+data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#237afc"
+    },
+    "button": {
+      "background": "#fff",
+      "text": "#237afc"
+    }
+  },
+  "type": "opt-in"
+});
+</script></body>
+
+</html>

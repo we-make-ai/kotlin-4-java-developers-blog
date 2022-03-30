@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:locale:alternate" content="de_AT" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+  <link rel="canonical" href="kotlin4java.online/2020/03/17/Lambdas-in-Kotlin.html"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Lambda Funktionen in Kotlin | Kotlin 4 Java Developers</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Lambda Funktionen in Kotlin" />
+<meta name="author" content="Bernhard J. Mayr" />
+<meta property="og:locale" content="de" />
+<meta name="description" content="Wir zeigen, wie wir Lambda-Ausdrücke (lambda expressions) in Kotlin definieren und in unseren Programmen einsetzen können." />
+<meta property="og:description" content="Wir zeigen, wie wir Lambda-Ausdrücke (lambda expressions) in Kotlin definieren und in unseren Programmen einsetzen können." />
+<link rel="canonical" href="kotlin4java.online/2020/03/17/Lambdas-in-Kotlin.html" />
+<meta property="og:url" content="kotlin4java.online/2020/03/17/Lambdas-in-Kotlin.html" />
+<meta property="og:site_name" content="Kotlin 4 Java Developers" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-17T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Lambda Funktionen in Kotlin" />
+<script type="application/ld+json">
+{"description":"Wir zeigen, wie wir Lambda-Ausdrücke (lambda expressions) in Kotlin definieren und in unseren Programmen einsetzen können.","mainEntityOfPage":{"@type":"WebPage","@id":"kotlin4java.online/2020/03/17/Lambdas-in-Kotlin.html"},"url":"kotlin4java.online/2020/03/17/Lambdas-in-Kotlin.html","headline":"Lambda Funktionen in Kotlin","dateModified":"2020-03-17T00:00:00+01:00","datePublished":"2020-03-17T00:00:00+01:00","@type":"BlogPosting","author":{"@type":"Person","name":"Bernhard J. Mayr"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="kotlin4java.online/feed.xml" title="Kotlin 4 Java Developers" /><script>
+if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-152392799-4', 'auto');
+  ga('send', 'pageview');
+}
+</script>
+  
+<script src="/assets/lazysizes.min.js" async></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+  
+
+  
+
+  <script>
+  function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+  }
+  window.onload = wrap_img;
+  </script>
+
+</head><body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Kotlin 4 Java Developers</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">Über uns</a><a class="page-link" href="/datenschutzerklaerung.html">Datenschutzerklärung</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://amzn.to/3curXKy" target="_blank" alt="kotlin-4-java-developers">
+                <img src="/images/kotlin-4-java-developers-buch.webp" alt="Logo Buch Kotlin4Java Developers" width="180px" />
+              </a>
+          </div>
+
+          Alle Informationen zur <h1>Programmierung mit Kotlin</h1> haben wir kompakt in unserem Buch <a href="https://amzn.to/3curXKy" alt="Kotlin4JavaDevelopers - unser Buch auf Amazon" target="_blank"><b>Kotlin 4 Java Developers</b></a> zusammengefasst.
+          <br/><br/>
+ </div>
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Lambda Funktionen in Kotlin</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-03-17T00:00:00+01:00" itemprop="datePublished">
+        2020-03-17
+      </time>• 
+            
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name"><a href="https://www.linkedin.com/in/bemayr/">Bernhard J. Mayr</a></span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Als <em>Lambdas</em> (bzw. <em>lambda Funktionen</em>) bezeichnen wir annonyme Funktionen, die als Ausdruck verwendet werden können.</p>
+
+<p>Aus früheren Versionen von Java waren wir es gewohnt, für diesen Zweck annonyme innere Klassen zu verwenden.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-f6f73dd5.webp" alt="Annonyme innere Klassen in Java als Lambda Funktionen" /></p>
+
+<p>Lambda Funktionen ermöglichen es, mit Collection Datentypen in einem funktionalen Stil zu arbeiten, was den Code im Allgemein besser lesbar macht.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">employees</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Employee</span><span class="p">&gt;</span>
+
+<span class="kd">data class</span> <span class="nc">Employee</span><span class="p">(</span>
+    <span class="kd">val</span> <span class="py">city</span><span class="p">:</span> <span class="nc">City</span><span class="p">,</span> <span class="n">cal</span> <span class="n">age</span><span class="p">:</span> <span class="nc">Int</span>
+<span class="p">)</span>
+
+<span class="n">employees</span><span class="p">.</span><span class="nf">filter</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">city</span> <span class="p">==</span> <span class="nc">City</span><span class="p">.</span><span class="nc">PRAGUE</span> <span class="p">}</span>
+         <span class="p">.</span><span class="nf">map</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">age</span> <span class="p">}</span>
+         <span class="p">.</span><span class="nf">average</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="lambda-syntax-in-kotlin">Lambda Syntax in Kotlin</h2>
+<p>In Kotlin werden Lambda Ausdrücke immer innerhalb von geschweiften Klammern geschrieben: <code class="language-plaintext highlighter-rouge">{ x: Int, y: Int -&gt; x+y}</code>. Immer wenn innerhalb der geschweiften Klammern ein Lambda-Ausdruck steht, werden diese Klammern fett dargestellt.</p>
+
+<p>Innerhalb der Klammern stehen zuerst die Lambda-Parameter: <code class="language-plaintext highlighter-rouge">x: Int, y: Int</code>, dann der Pfeil <code class="language-plaintext highlighter-rouge">-&gt;</code> und rechts vom Pfeil der Lambda-Body: <code class="language-plaintext highlighter-rouge">x+y</code>.</p>
+
+<p>Wird der Lambda-Ausdruck als Argument an eine Funktion übergeben, so steht der gesamte Lambda-Ausdruck innerhalb der Funktionsparameter: <code class="language-plaintext highlighter-rouge">list.any({ i:Int -&gt; i &gt; 0})</code>. Ist der Lambda-Ausdruck jedoch der letzte Funktionsparameter, so kann man diesen auch aus den Klammern des Funktionsaufrufs herausheben: <code class="language-plaintext highlighter-rouge">list.any() { i:Int -&gt; i &gt; 0}</code>.</p>
+
+<p>Sind die Klammern des Funktionsaufrufs nach Herausheben des Lambda-Ausdrucks leer, so kann man diese in Kotlin auch weglassen: <code class="language-plaintext highlighter-rouge">list.any { i:Int -&gt; i &gt; 0}</code>.</p>
+
+<p>Wenn der Typ im Lambda-Ausdruck aus dem Kontext abgeleitet werden kann, kann dieser auch beim Funktionsaufruf weggelassen werden: <code class="language-plaintext highlighter-rouge">list.any { i -&gt; i &gt; 0}</code>.</p>
+
+<p>Hat der Lambda-Ausdruck sein eigenes Argument, so kann dieses durch das Schlüsselwort <code class="language-plaintext highlighter-rouge">it</code> ersetzt werden: <code class="language-plaintext highlighter-rouge">list.any { it &gt; 0}</code>. Das Schlüsselwort <code class="language-plaintext highlighter-rouge">it</code> kann immer dann verwendet werden, wenn der Lambda-Ausdruck nur ein Argument hat und keine andere Bezeichnung für dieses Argument generiert.</p>
+
+<p>Besteht der Lambda-Ausdruck aus mehreren Anweisungen, so können wir einfach mehere Zeilen innerhalb der Klammern des Lambda-Ausdrucks einfügen:</p>
+
+<pre><code class="language-Kotlin">list.any {
+    println("processing $it")
+    it &gt; 0
+}
+</code></pre>
+
+<p>In der letzten Zeile des Lambda-Ausdruck steht der Rückgabewert des gesamten Lambdas.</p>
+
+<h2 id="destructuring-declarations-mit-lambda-ausdrücken">Destructuring Declarations mit Lambda-Ausdrücken</h2>
+<p>Wenn der Lambda-Ausdruck ein Paar von Werten als Argument akzeptiert (z.B. ein <em>key-value-pair</em> als Eintrag in eine <code class="language-plaintext highlighter-rouge">Map</code>), kann die sogenannte <em>destructuring syntax</em> verwendet werden.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="nf">mapValues</span> <span class="p">{</span> <span class="n">entry</span> <span class="p">-&gt;</span> <span class="s">"${entry.key} -&gt; ${entry.value}!"</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Die gleiche Syntax haben wir bereits bei der Iteration über Schleifen gesehen. Anstatt nun jeweils auf <code class="language-plaintext highlighter-rouge">entry.key</code> und <code class="language-plaintext highlighter-rouge">entry.value</code> zu referenzieren, können wir die Variable aus zwei Variablen destrukturieren:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">map</span><span class="p">.</span><span class="nf">mapValues</span> <span class="p">{</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="s">"$key -&gt; $value!"</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="auf-collections-im-functional-style-zugreifen">Auf Collections im <em>functional Style</em> zugreifen</h2>
+<p>Beginnen wir mit <code class="language-plaintext highlighter-rouge">filter</code> und <code class="language-plaintext highlighter-rouge">map</code>.</p>
+
+<p><em>Wie hoch ist das Durchschnittsalter der Mitarbeiter in der Niederlassung in Timbuktu?</em></p>
+
+<pre><code class="language-Kotlin">val employees: List&lt;Employee&gt;
+
+data class Employee(
+    val city: City, cal age: Int
+)
+
+employees.filter { it.city. == City.TIMBUKTU}.map { it.age }.average()
+</code></pre>
+
+<h3 id="die-filter-funktion">Die <code class="language-plaintext highlighter-rouge">filter</code>-Funktion</h3>
+<p>Die Erweiterungsfunktion <code class="language-plaintext highlighter-rouge">filter</code> filtert den Inhalt der Collection und behaltet nur jene Elemente, die den Filterkriterien genügen.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-a74331d9.webp" alt="Filter Erweiterungsfunktion in Kotlin" /></p>
+
+<p>Die Funktion <code class="language-plaintext highlighter-rouge">filter</code> liefert die gefilterten Elemente als Ergebnis zurück.</p>
+
+<h3 id="die-map-funktion">Die <code class="language-plaintext highlighter-rouge">map</code>-Funktion</h3>
+<p>Die <code class="language-plaintext highlighter-rouge">map</code>-Funktion transformiert jedes Element in der Collection (in dem sie eine bestimmte Operation auf jedes Element, das in der Collection enthalten ist, anwendet).</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-b76d2299.webp" alt="die map-funktion in kotlin" /></p>
+
+<h3 id="die-any-funktion">Die <code class="language-plaintext highlighter-rouge">any</code>-Funktion</h3>
+<p>Die <code class="language-plaintext highlighter-rouge">any</code>-Funktion prüt, ob es zumindest ein Element in der Collection gibt, das dem übergegebenen Kriterium entspricht. (Beispielsweise, gibt es zumindest eine gerade Zahl in der List?)</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-fa189710.webp" alt="die any-funktion in kotlin" /></p>
+
+<p>Mithilfe der Parameter <code class="language-plaintext highlighter-rouge">all</code> und <code class="language-plaintext highlighter-rouge">none</code> kann der Rückgabewert beeinflusst werden. Wird <code class="language-plaintext highlighter-rouge">all</code> als Aufrufparameter mitübergeben, so müssen allen Elemente in der Liste dem Kriterium entsprechen. Verwenden wir den Parameter <code class="language-plaintext highlighter-rouge">None</code>, so liefert die Funktion nur dann <code class="language-plaintext highlighter-rouge">true</code> zurück, wenn keines der Elemente den Kriterien entspricht.</p>
+
+<h3 id="die-find-funktion">Die <code class="language-plaintext highlighter-rouge">find</code>-Funktion</h3>
+<p>Mithilfe der <code class="language-plaintext highlighter-rouge">find</code>-Funktion kann in der Collection nach einem Element gesucht werden, das dem Kriterium entspricht. Wird kein Element gefunden, so liefert die Funktion <code class="language-plaintext highlighter-rouge">null</code> zurück.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-e98e5040.webp" alt="die find-funktion in kotlin" /></p>
+
+<p>Die Funktionalität kann auch mithilfe der Funktion <code class="language-plaintext highlighter-rouge">first</code> bzw. <code class="language-plaintext highlighter-rouge">firstOrNull</code> realisiert werden.</p>
+
+<h3 id="die-count-funktion">Die <code class="language-plaintext highlighter-rouge">count</code>-Funktion</h3>
+<p>Die <code class="language-plaintext highlighter-rouge">count</code>-Funktion liefert die Anzahl der Elemente in der Collection, die dem jeweiligen Kriterium entsprechen.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-f4679ed4.webp" alt="count-funktion in kotlin" /></p>
+
+<h3 id="die-partition-funktion">Die <code class="language-plaintext highlighter-rouge">partition</code>-Funktion</h3>
+<p>Mit der Funktion <code class="language-plaintext highlighter-rouge">partition</code> können Collections in zwei Collections aufgeteilt werden.</p>
+
+<p>Eine, die alle Elemente enthält, die <strong>dem Kriterium entsprechen</strong> und eine, die jene Elemente enthält, die <strong>dem Kriterium nicht entsprechen</strong>.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-08d520cc.webp" alt="partition funktion in kotlin" /></p>
+
+<h3 id="die-groupby-funktion">Die <code class="language-plaintext highlighter-rouge">groupBy</code>-Funktion</h3>
+<p>Möchten wir unsere Collection in mehr als zwei Teile unterteilen, so können wir die Funktion <code class="language-plaintext highlighter-rouge">groupBy</code> verwenden.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-8acccaab.webp" alt="group by funktion in kotlin" /></p>
+
+<p>Als Funktionsparameter geben wir jenes Element an, das den Gruppierungsschlüssel darstellt. Als Rückgabewert erhalten wir eine Map, deren key das Gruppierungselement und deren value eine Liste mit den entsprechenden Elementen ist, die in die jeweilige Gruppe fallen.</p>
+
+<h3 id="die-associateby-funktion">Die <code class="language-plaintext highlighter-rouge">associateBy</code>-Funktion</h3>
+<p>Mithilfe der Funktion <code class="language-plaintext highlighter-rouge">associateBy</code> können wir die Elemente in einer Liste über einen neuen Schlüssel ansprechen. Wir erhalten als Rückgabewert eine Map, deren key das übergebene Kriterium ist.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-ff99aead.webp" alt="die associateBy funktion in kotlin" /></p>
+
+<p>Bei der Verwendung der Funktion <code class="language-plaintext highlighter-rouge">associateBy</code> müssen wir beachten, dass die <code class="language-plaintext highlighter-rouge">key</code>-Elemente einzigartig sein müssen. Duplikate werden von dieser Funktion verworfen.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-988cb529.webp" alt="associateBy funktion in kotlin verwirft duplikate" /></p>
+
+<p>Mithilfe von <code class="language-plaintext highlighter-rouge">associate</code> können wir auch aus einer Liste eine Map Datenstruktur aufbauen:</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-c559f324.webp" alt="liste in map umwandeln mithilfe der associate funktion in kotlin" /></p>
+
+<p>In obigem Beispiel definiert <code class="language-plaintext highlighter-rouge">'a'+it</code> die keys und <code class="language-plaintext highlighter-rouge">10*it</code> die values.</p>
+
+<h3 id="die-zip-funktion">Die <code class="language-plaintext highlighter-rouge">zip</code>-Funktion</h3>
+<p>Diese Funktion wird vor allem auch Python-Programmieren bekannt sein. Mithilfe von <code class="language-plaintext highlighter-rouge">zip</code> können wir gleichzeitig über zwei Listen iterieren.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-3937d78b.webp" alt="zip funktion in kotlin " /></p>
+
+<p>Die Bezeichung <code class="language-plaintext highlighter-rouge">zip</code> soll eine Analogie zu einem <em>Zipper</em> (Reißverschluß) darstellen, bei dem immer jeweils ein Element von beiden Seiten verwendet wird.</p>
+
+<p>Haben die beiden Listen nicht die gleiche Anzahl an Elementen, so ist das Ergebnis von <code class="language-plaintext highlighter-rouge">zip</code> genauso lang wie die kürzere der beiden Listen.</p>
+
+<h4 id="variante-der-funktion-zipwithnext">Variante der Funktion: <code class="language-plaintext highlighter-rouge">zipWithNext</code></h4>
+<p>Mithilfe von <code class="language-plaintext highlighter-rouge">zipWithNext</code> können jeweils benachbarte Elemente einer einzigen Liste zu den Elementen der neuen Liste zusammengefügt werden.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-3512fce6.webp" alt="zipwithnext funktion in kotlin" /></p>
+
+<h3 id="die-flatten-funktion">Die <code class="language-plaintext highlighter-rouge">flatten</code>-Funktion</h3>
+<p>Mithilfe der <code class="language-plaintext highlighter-rouge">flatten</code>-Funktion kann eine Liste erstellt werden, die sämtliche Elemente einer hierarchischen Liste vereint. Die Hiearchie in der Liste wird durch den Einsatz dieser Funktion entfernt.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-d297daf0.webp" alt="flatten funktioni kotlin" /></p>
+
+<h4 id="eine-variante-die-flatmap-funktion">Eine Variante: die ‘flatMap’-Funktion</h4>
+<p>Die Methode <code class="language-plaintext highlighter-rouge">flatMap</code> verbindet die <code class="language-plaintext highlighter-rouge">map</code>-Funktion mit der <code class="language-plaintext highlighter-rouge">flatten</code>-Funktion.</p>
+
+<p>Zuerst werden mittels Lambda-Ausdruck die Elemente der Liste konvertiert (<em>map</em>) und daraus dann eine flache Liste generiert (<em>flatten</em>). Nach dem ersten Funktionsaufruf von <code class="language-plaintext highlighter-rouge">map</code> erhalten wir eine Liste von Listen. Meist bevorzugen wir jedoch eine flache Liste von Elementen.</p>
+
+<p><img src="/images/410_Lambdas_in_Kotlin-c6406fc0.webp" alt="flatMap funktion in kotlin" /></p>
+
+<h2 id="verständnisfragen">Verständnisfragen</h2>
+
+<p>Die folgenden Fragen vertiefen das Verständnis über die Anwendung der oben erklärten Funktionen. Wir verwenden folgende Basisklasse:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">data class</span> <span class="nc">Hero</span><span class="p">(</span>
+    <span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+    <span class="kd">val</span> <span class="py">age</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
+    <span class="kd">val</span> <span class="py">gender</span><span class="p">:</span> <span class="nc">Gender</span><span class="p">?</span>
+<span class="p">)</span>
+<span class="k">enum</span> <span class="kd">class</span> <span class="nc">Gender</span> <span class="p">{</span> <span class="nc">MALE</span><span class="p">,</span> <span class="nc">FEMALE</span> <span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">heroes</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">)</span>
+    <span class="nc">Hero</span><span class="p">(</span><span class="s">"The Captain"</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="nc">MALE</span><span class="p">),</span>
+    <span class="nc">Hero</span><span class="p">(</span><span class="s">"Frenchy"</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="nc">MALE</span><span class="p">),</span>
+    <span class="nc">Hero</span><span class="p">(</span><span class="s">"The Kid"</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="k">null</span><span class="p">),</span>
+    <span class="nc">Hero</span><span class="p">(</span><span class="s">"lady Lauren"</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="nc">FEMALE</span><span class="p">),</span>
+    <span class="nc">Hero</span><span class="p">(</span><span class="s">"First Mate"</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="nc">FEMALE</span><span class="p">),</span>
+    <span class="nc">Hero</span><span class="p">(</span><span class="s">"Sir Stephen"</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="nc">MALE</span><span class="p">))</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Welche Ausgabe erhalten wir durch diesen Ausdruck: <code class="language-plaintext highlighter-rouge">heroes.last().name</code>?
+    <blockquote>
+      <p>“Sir Stephen”</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">heroes.firstOrNull { it.age == 30 }?.name</code>?
+    <blockquote>
+      <p>null</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">heroes.map { it.age }.distinct().size</code>?
+    <blockquote>
+      <p>[60, 42, 9, 29, 37]</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">heroes.filter { it.age &lt; 30 }.size</code>?
+    <blockquote>
+      <p>3</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">val (youngest, oldest) = heroes.partition { it.age &lt; 30 } oldest.size</code>?
+    <blockquote>
+      <p>Zwei Listen (eine mit Alter&lt;30 und ein mit Alter&gt;=30)</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">heroes.maxBy { it.age }?.name</code>?
+    <blockquote>
+      <p>“The Captain”</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">heroes.all { it.age &lt; 50 }</code>
+    <blockquote>
+      <p>false</p>
+    </blockquote>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">heroes.any { it.gender == FEMALE }</code>
+    <blockquote>
+      <p>true</p>
+    </blockquote>
+  </li>
+  <li>
+    <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">mapByAge</span><span class="p">:</span> <span class="nc">Map</span><span class="p">&lt;</span><span class="nc">Int</span><span class="p">,</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Hero</span><span class="p">&gt;&gt;</span> <span class="p">=</span>
+<span class="n">heroes</span><span class="p">.</span><span class="nf">groupBy</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">age</span> <span class="p">}</span>
+<span class="kd">val</span> <span class="p">(</span><span class="py">age</span><span class="p">,</span> <span class="py">group</span><span class="p">)</span> <span class="p">=</span> <span class="n">mapByAge</span><span class="p">.</span><span class="nf">maxBy</span> <span class="p">{</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span> <span class="p">-&gt;</span>
+<span class="n">group</span><span class="p">.</span><span class="n">size</span>
+<span class="p">}</span><span class="o">!!</span>
+<span class="nf">println</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
+</code></pre></div>    </div>
+    <ol>
+      <li>Als ersten erstellen wir eine Map-Datenstruktur, mit dem Alter als Key und einer Liste mit den entsprechenden Heros als Value.</li>
+      <li>Danach rufen wir darauf die Funktion <code class="language-plaintext highlighter-rouge">maxBy</code> auf, die uns das größte Element liefert (in unserem Fall bezogen auf das Property <code class="language-plaintext highlighter-rouge">.group</code>)</li>
+    </ol>
+
+    <blockquote>
+      <p>Also erhalten wir als Rückgabewert: 2 (bzw. 29 für das Alter)</p>
+    </blockquote>
+  </li>
+  <li>
+    <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">mapByName</span><span class="p">:</span> <span class="nc">Map</span><span class="p">&lt;</span><span class="nc">String</span><span class="p">,</span> <span class="nc">Hero</span><span class="p">&gt;</span> <span class="p">=</span>
+ <span class="n">heroes</span><span class="p">.</span><span class="nf">associateBy</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">name</span> <span class="p">}</span>
+<span class="n">mapByName</span><span class="p">[</span><span class="s">"Frenchy"</span><span class="p">]</span><span class="o">?.</span><span class="n">age</span>
+</code></pre></div>    </div>
+    <p>In diesem Fall gruppieren wir die Elemente mit ihrem Namen mithilfe der <code class="language-plaintext highlighter-rouge">associateBy</code> Funktion. Wir erhalten eine Map-Datenstruktur mit dem Key <em>name</em> und dem Value <em>Hero-Objekt</em>.</p>
+    <blockquote>
+      <p>42</p>
+    </blockquote>
+  </li>
+  <li>
+    <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">mapByName</span> <span class="p">=</span> <span class="n">heroes</span><span class="p">.</span><span class="nf">associateBy</span> <span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">name</span> <span class="p">}</span>
+<span class="kd">val</span> <span class="py">unknownHero</span> <span class="p">=</span> <span class="nc">Hero</span><span class="p">(</span><span class="s">"Unknown"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
+<span class="n">mapByName</span><span class="p">.</span><span class="nf">getOrElse</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span> <span class="p">{</span> <span class="n">unknownHero</span> <span class="p">}.</span><span class="n">age</span>
+</code></pre></div>    </div>
+    <blockquote>
+      <p>Die Funktion <code class="language-plaintext highlighter-rouge">getOrElse(..)</code> liefert den entsprechenden Wert zu dem Property. Ist das Property nicht vorhanden, so verarbeitet die Funktion den Lambda-Ausdruck.<br />
+Der Rückgabewert ist in diesem Fall daher: 0</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h2 id="function-types-in-kotlin">Function Types in Kotlin</h2>
+<p>In Kotlin können wir Lambda-Ausdrücke direkt in Variablen speichern. Diese Variable ist dann vom Type <code class="language-plaintext highlighter-rouge">function type</code>:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">sum</span> <span class="p">=</span> <span class="p">{</span> <span class="n">x</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">+</span> <span class="n">y</span> <span class="p">}</span>
+<span class="c1">// is the same as:</span>
+<span class="kd">val</span> <span class="py">sum</span><span class="p">:</span> <span class="p">(</span><span class="nc">Int</span><span class="p">,</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nc">Int</span> <span class="p">=</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">+</span> <span class="n">y</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>In obigem Beispiel haben wir also einen Lambda Ausdruck, der zwei <code class="language-plaintext highlighter-rouge">Int</code>-Werte als Input akzeptiert und einen <code class="language-plaintext highlighter-rouge">Int</code> als Output zurückliefert.</p>
+
+<p>Das untere Beispiel akzeptiert einen <code class="language-plaintext highlighter-rouge">Int</code>-Wert und liefert einen <code class="language-plaintext highlighter-rouge">Boolean</code>-Wert zurück:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">isEven</span><span class="p">:</span> <span class="p">(</span><span class="nc">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">-&gt;</span> <span class="n">i</span> <span class="p">%</span> <span class="mi">2</span> <span class="p">==</span> <span class="mi">0</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Bei der Speicherung von Lambda-Ausdrücken in Variablen müssen wir zwischen dem Speichern eines Lambda-Ausdrucks und dem Speichern des Ergebnisses eines Lambda-Ausdrucks unterscheiden!</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">result</span><span class="p">:</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="nf">isEven</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span> <span class="c1">// true</span>
+</code></pre></div></div>
+
+<p>Eine Variable, in der wir einen Lambda-Ausdruck gespeichert haben, können wir an jeder Stelle im Quellcode verwenden, an der wir auch einen Lambda-Ausdruck direkt verwenden können.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">list</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">list</span><span class="p">.</span><span class="nf">any</span><span class="p">(</span><span class="n">isEven</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="n">list</span><span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="n">isEven</span><span class="p">)</span> <span class="c1">// [2, 4]</span>
+</code></pre></div></div>
+
+<p>Wenn wir runde Klammern direkt hinter einen Lambda-Ausdruck einfügen, können wir diesen auch direkt aufrufen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span> <span class="nf">println</span><span class="p">(</span><span class="s">"hey!"</span><span class="p">)}()</span>
+<span class="c1">// works the same way like</span>
+<span class="nf">run</span> <span class="p">{</span> <span class="nf">println</span><span class="p">(</span><span class="s">"hey!"</span><span class="p">)</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="nullability-und-function-types">Nullability und Function Types</h3>
+<p>Auch bei Functions-Types können wir uns überlegen, wie Kotlin die Nullability von Typen handhabt. Welche der folgenden Ausdrücke ist nicht kompilierbar?</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">val f1: () -&gt; Int? = null</code></li>
+  <li><code class="language-plaintext highlighter-rouge">val f2: () -&gt; Int? = { null }</code></li>
+  <li><code class="language-plaintext highlighter-rouge">val f3: (() -&gt; Int)? = null</code></li>
+  <li><code class="language-plaintext highlighter-rouge">val f4: (() -&gt; Int)? = { null }</code></li>
+</ol>
+
+<p>Worin liegt der Unterschied zwischen <code class="language-plaintext highlighter-rouge">() -&gt; Int?</code> und <code class="language-plaintext highlighter-rouge">(() -&gt; Int)?</code>?</p>
+
+<p>Im ersten Beispiel ist der Rückgabetyp <code class="language-plaintext highlighter-rouge">nullable</code>. Im zweiten Beispiel ist der Function Type <code class="language-plaintext highlighter-rouge">nullable</code>.</p>
+
+<p>Was bedeutet <code class="language-plaintext highlighter-rouge">{ null }</code>? Dies ist ein Lambda-Ausdruck, der <code class="language-plaintext highlighter-rouge">null</code> zurückliefert.</p>
+
+<p>Dieser Ausdruck <code class="language-plaintext highlighter-rouge">val f3: (() -&gt; Int)? = null</code> kann entweder einen Lambda-Ausdruck, der einen <code class="language-plaintext highlighter-rouge">Int</code>-Wert zurückliefert oder <code class="language-plaintext highlighter-rouge">null</code> speichern.</p>
+
+<p><strong>Wie sieht nun also die Auflösung der Frage aus?</strong></p>
+
+<blockquote>
+  <p>Im ersten Beispiel versuchen wir <code class="language-plaintext highlighter-rouge">null</code> einer Variablen zuzuweisen, deren Typ <code class="language-plaintext highlighter-rouge">not-nullable</code> ist. Dies kann nicht kompiliert werden.
+Im zweiten Beispiel speichern wir einen Lambda-Ausruck in der Variablen, der immer <code class="language-plaintext highlighter-rouge">null</code> zurückliefert. Dieser Ausdruck kann kompiliert werden.
+Das dritte Beispiel kompiliert problemlos, da hier die Variable mit einem <code class="language-plaintext highlighter-rouge">nullable</code>-Function Type initialisiert wird. Diesem können wir problemlos <code class="language-plaintext highlighter-rouge">null</code> zuweisen.
+Der vierte Ausdruck wiederum kann nicht kompiliert werden, da der Lambda-Ausdruck einen <code class="language-plaintext highlighter-rouge">Int</code>-Wert zurückliefern muss.</p>
+</blockquote>
+
+<p>Generell können wir <code class="language-plaintext highlighter-rouge">nullable</code>-Function Types nicht direkt aufrufen. Wir haben jedoch diese beiden Möglichkeiten:</p>
+
+<ol>
+  <li>Wir können explizit auf <code class="language-plaintext highlighter-rouge">null</code> prüfen und mittels smart-cast die Variable aufrufen:
+    <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nf">f</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Wir verwenden die Methode <code class="language-plaintext highlighter-rouge">invoke()</code>:
+    <div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f</span><span class="o">?.</span><span class="nf">invoke</span><span class="p">()</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="referenzen-auf-klassen-member-in-kotlin">Referenzen auf Klassen-Member in Kotlin</h2>
+<p>In Kotlin können wir keine Funktionen in Variablen speichern, so wie das in voll-funktionalen Sprachen der Fall ist. Wir können jedoch Referenzen auf Funktionen in Variablen speichern:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">isEven</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nc">Int</span><span class="p">):</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="n">i</span> <span class="p">%</span> <span class="mi">2</span> <span class="p">==</span> <span class="mi">0</span>
+
+<span class="kd">val</span> <span class="py">predicate</span> <span class="p">?=</span> <span class="o">::</span><span class="n">isEven</span>
+</code></pre></div></div>
+
+<p>Die Funktionsreferenz wird genauso wie in Java angelegt. Der Klassenname (kann entfallen wenn direkt in der Klasse angelegt) und danach die Bezeichnung der Funktion, getrennt von zwei Doppelpunkten <code class="language-plaintext highlighter-rouge">::</code>. Dies ist jedoch nur ein anderer Weg, einen Lambda-Ausdruck aufzurufen. Wir könnten statt der Funktionsreferenz auch direkt einen Lambda-Ausdruck in der Variablen speichern:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">predicate</span> <span class="p">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="nc">Int</span> <span class="p">-&gt;</span> <span class="nf">isEven</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Ein Vorteil der Verwendung der Funktionsreferenz ist, dass wir alle Parameter der Funktion verstecken können. Vergleiche die beiden identen Code-Beispiele:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">action</span> <span class="p">=</span> <span class="p">{</span> <span class="n">person</span><span class="p">:</span> <span class="nc">Person</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nc">String</span> <span class="p">-&gt;</span> <span class="nf">sendEmail</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span> <span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">action</span> <span class="p">=</span> <span class="o">::</span><span class="n">sendEmail</span>
+</code></pre></div></div>
+
+<p>Die erforderlichen Parameter werden direkt vom Compiler abgeleitet. Wir können somit die Funktionreferenzen dazu nutzen, komplexe Lambda-Ausdrücke in einzelne Funktionsaufrufe zu unterteilen:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">isEven</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nc">Int</span><span class="p">):</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="n">i</span> <span class="p">%</span> <span class="mi">2</span> <span class="p">==</span> <span class="mi">0</span>
+
+<span class="kd">val</span> <span class="py">list</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">list</span><span class="p">.</span><span class="nf">any</span><span class="p">(</span><span class="o">::</span><span class="n">isEven</span><span class="p">)</span>      <span class="c1">// true</span>
+<span class="n">list</span><span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="o">::</span><span class="n">isEven</span><span class="p">)</span>   <span class="c1">// [2, 4]</span>
+</code></pre></div></div>
+
+<h3 id="bound-vs-non-bound-referenzen"><code class="language-plaintext highlighter-rouge">Bound</code> vs. <code class="language-plaintext highlighter-rouge">Non-Bound</code> Referenzen</h3>
+<p>In folgendem Beispiel verwenden wir eine klassische <code class="language-plaintext highlighter-rouge">non-bound</code>-Referenz (<code class="language-plaintext highlighter-rouge">Person::isOlder</code>), die die zugehörige Klasse referenziert. Wir müssen daher jedesmal bei Aufruf dieser Funktionsreferenz explizit ein Objekt vom Typ <code class="language-plaintext highlighter-rouge">Person</code> im Zuge des Aufrufs mitübergeben.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">age</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">isOlder</span><span class="p">(</span><span class="n">ageLimit</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">=</span> <span class="n">age</span> <span class="p">&gt;</span> <span class="n">ageLimit</span>
+<span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">agePredicate</span> <span class="p">=</span> <span class="nc">Person</span><span class="o">::</span><span class="n">isOlder</span>
+
+<span class="kd">val</span> <span class="py">alice</span> <span class="p">=</span> <span class="nc">Person</span><span class="p">(</span><span class="s">"Alice"</span><span class="p">,</span> <span class="mi">29</span><span class="p">)</span>
+<span class="nf">agePredicate</span><span class="p">(</span><span class="n">alice</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>     <span class="c1">// true</span>
+</code></pre></div></div>
+
+<p>Betrachten wir nun die interne Umsetzung: Aus unserer Funktionsreferenz wird ein Lambda-Auseruck generiert, der zwei Parameter akzeptiert (<code class="language-plaintext highlighter-rouge">person</code> und <code class="language-plaintext highlighter-rouge">ageLimit</code>):</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">agePredicate</span> <span class="p">=</span> <span class="p">(</span><span class="nc">Person</span><span class="p">,</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="n">person</span><span class="p">,</span> <span class="n">ageLimit</span> <span class="p">-&gt;</span> <span class="n">person</span><span class="p">.</span><span class="nf">isOlder</span><span class="p">(</span><span class="n">ageLimit</span><span class="p">)</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Diese Funktionsreferenz ist nicht an eine bestimmte Referenz gebunden und wird daher als <code class="language-plaintext highlighter-rouge">non-bound</code> bezeichnet. Eine gebundenen (oder <code class="language-plaintext highlighter-rouge">bound</code>) Referenz hingegen ist an eine bestimmte Instanz der Klasse gebunden:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">age</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">isOlder</span><span class="p">(</span><span class="n">ageLimit</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">=</span> <span class="n">age</span> <span class="p">&gt;</span> <span class="n">ageLimit</span>
+<span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">alice</span> <span class="p">=</span> <span class="nc">Person</span><span class="p">(</span><span class="s">"Alice"</span><span class="p">,</span> <span class="mi">29</span><span class="p">)</span>
+<span class="kd">val</span> <span class="py">agePredicate</span> <span class="p">=</span> <span class="n">alice</span><span class="o">::</span><span class="n">isOlder</span>
+
+<span class="nf">agePredicate</span><span class="p">(</span><span class="n">alice</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>     <span class="c1">// true</span>
+</code></pre></div></div>
+
+<p>In obigem Beispiel haben wir im Lambda-Ausdruck kein Objekt vom Typ <code class="language-plaintext highlighter-rouge">Person</code> mehr, da dieses Objekt direkt mit der Funktionsreferenz gesetzt wurde.</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">val</span> <span class="py">agePredicate</span> <span class="p">=</span> <span class="p">(</span><span class="nc">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nc">Boolean</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="n">ageLimit</span> <span class="p">-&gt;</span> <span class="n">alice</span><span class="p">.</span><span class="nf">isOlder</span><span class="p">(</span><span class="n">ageLimit</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Member-Funktionsreferenzen können mittels <code class="language-plaintext highlighter-rouge">this</code> direkt an die jeweilige Instanz gebunden werden:</p>
+
+<div class="language-kotlin highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">age</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">fun</span> <span class="nf">isOlder</span><span class="p">(</span><span class="n">ageLimit</span><span class="p">:</span> <span class="nc">Int</span><span class="p">)</span> <span class="p">=</span> <span class="n">age</span> <span class="p">&gt;</span> <span class="n">ageLimit</span>
+
+    <span class="k">fun</span> <span class="nf">getAgePredicate</span><span class="p">()</span> <span class="p">=</span> <span class="k">this</span><span class="o">::</span><span class="n">isOlder</span>
+    <span class="c1">// this can also be ommited:</span>
+    <span class="c1">// fun getAgePredicate() = ::isOlder</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/2020/03/17/Lambdas-in-Kotlin.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+      <div style="width: 100%">
+          <div style="float: left; width: 200px;">
+              <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">
+              <img alt="Die KI Revolution. Warum Unternehmen ohne KI keine Zukunft haben." data-src="/images/index-84c9d1a4.webp" class="lazyload" width="180px" />
+              </a>
+          </div>
+
+          <strong>In unserem Buch <a href="https://www.amazon.de/Die-KI-Revolution-Unternehmen-Leitfaden-F%C3%BChrungskr%C3%A4fte-ebook/dp/B07RY2SXTM/ref=as_sl_pc_as_ss_li_til?tag=weiteblog-21&linkCode=w00&linkId=e3f6bfbd152c167c07f802d11e310c88&creativeASIN=B07RY2SXTM">Die KI-Revolution. Warum Unternehmen ohne KI keine Zukunft haben.</a> </strong> erläutern wir wie man künstliche Intelligenz aus wirtschaftlicher Perspektive im Unternehmen umsetzen kann.
+
+          Projekte aus verschiedenen Anwendungsgebiten der KI stellen wir auch auf unseren linkedin-Showcase Seiten aus:
+          <br/><br/>
+          <p><strong>Bildverarbeitung:</strong> <a alt="ImageSegmentation" href="https://www.linkedin.com/showcase/image-segmentation/">ImageSegmentation</a></p>
+              <p><strong>Bildklassifizierung:</strong> <a href="https://detect-eye-diseases.herokuapp.com/">Erkennen von Augenerkrankungen mittels KI</a></p>
+              <p><strong>Deep Learning fürs Marketing:</strong> der <a alt="aitracer" href="https://www.linkedin.com/showcase/ai.tracer/"> aitracer</a></p>
+
+      </div>
+
+    <h2 class="footer-heading">Der Blog zu künstlicher Intelligenz von <a href="we-make.ai">we-make.ai</a></h2>
+    <h3>Künstliche Intelligenz, Machine Learning, Deep Learning</h3>
+    <a href="https://www.we-make.ai"><img data-src="/images/we-make-ai-logo.webp" class="lazyload" alt="Logo von we-make.ai"/></a>
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kotlin 4 Java Developers</li><li><a class="u-email" href="mailto:info@we-make.ai">info@we-make.ai</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://www.linkedin.com/in/we-make-ai"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">linkedin</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Kotlin, Java, Programmierung</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" 
+data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#237afc"
+    },
+    "button": {
+      "background": "#fff",
+      "text": "#237afc"
+    }
+  },
+  "type": "opt-in"
+});
+</script></body>
+
+</html>
