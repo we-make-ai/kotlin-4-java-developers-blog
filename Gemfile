@@ -33,3 +33,5 @@ gem "wdm", "~> 0.1.1", :install_if => Gem.win_platform?
 gem "faraday", "< 1.0"
 gem 'jekyll-seo-tag'
 gem "nokogiri", ">= 1.10.8"
+
+gem "webrick", "~> 1.7"

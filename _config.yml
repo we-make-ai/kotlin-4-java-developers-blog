@@ -9,7 +9,9 @@
 title: "Kotlin 4 Java Developers"
 description: "Kotlin, Java, Programmierung"
 github_username: "we-make-ai"
-domain: "we-make.ai"
+url: "kotlin4java.online"
+baseurl: ""
+#domain: "we-make.ai"
 # Email and twitter are optional:
 email: "info@we-make.ai"
 linkedin_username: "we-make-ai"
